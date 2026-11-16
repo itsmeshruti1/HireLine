@@ -1,0 +1,48 @@
+{
+  "mode": "demo",
+  "timestamp": "2026-11-10T17:50:43.736251+00:00",
+  "resumes": 20,
+  "scalar_field_accuracy": 1.0,
+  "skill_recall": 0.7317073170731707,
+  "verified_source_quotes": 103,
+  "accepted_source_quotes": 103,
+  "rankings": [
+    {
+      "job": "Python Backend Engineer",
+      "top_five": [
+        "candidate-01",
+        "candidate-02",
+        "candidate-03",
+        "candidate-04",
+        "candidate-05"
+      ],
+      "precision_at_5": 1.0,
+      "keyword_precision_at_5": 1.0
+    },
+    {
+      "job": "Frontend Engineer",
+      "top_five": [
+        "candidate-06",
+        "candidate-07",
+        "candidate-08",
+        "candidate-09",
+        "candidate-10"
+      ],
+      "precision_at_5": 1.0,
+      "keyword_precision_at_5": 1.0
+    },
+    {
+      "job": "Full-stack Product Engineer",
+      "top_five": [
+        "candidate-11",
+        "candidate-12",
+        "candidate-13",
+        "candidate-14",
+        "candidate-03"
+      ],
+      "precision_at_5": 0.8,
+      "keyword_precision_at_5": 0.8
+    }
+  ],
+  "failures": []
+}

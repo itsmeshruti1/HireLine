@@ -1,0 +1,126 @@
+{
+  "generated_at": "2026-11-10T19:15:30.243Z",
+  "video": "hireline-end-to-end.mp4",
+  "duration_seconds": 540.0,
+  "resolution": [
+    1440,
+    900
+  ],
+  "codecs": {
+    "video": "h264",
+    "audio": "aac"
+  },
+  "narrated": true,
+  "captions": "Burned-in ASS and sidecar SRT",
+  "narration_voice": "Microsoft Zira Desktop",
+  "modes": {
+    "auth_mode": "local",
+    "ai_mode": "demo",
+    "external_mode": "preview",
+    "local_login": true,
+    "frontend_url": "http://127.0.0.1:5185",
+    "worker_sleeps": false
+  },
+  "database": "fresh isolated SQLite fixture; user database untouched",
+  "external_delivery": "preview only; no live email/calendar claim",
+  "input_narration_seconds": 672.857052154195,
+  "tempo_factor": 1.3033074074074074,
+  "bytes": 11530458,
+  "chapters": [
+    {
+      "id": "overview",
+      "title": "01 · A workspace for thoughtful hiring",
+      "start_seconds": 0,
+      "end_seconds": 40.04
+    },
+    {
+      "id": "job",
+      "title": "02 · Define and approve the job rubric",
+      "start_seconds": 40.04,
+      "end_seconds": 78.77
+    },
+    {
+      "id": "upload",
+      "title": "03 · Import PDF and DOCX resumes",
+      "start_seconds": 78.77,
+      "end_seconds": 114.4
+    },
+    {
+      "id": "profile",
+      "title": "04 · Inspect and correct the extracted profile",
+      "start_seconds": 114.4,
+      "end_seconds": 148.22
+    },
+    {
+      "id": "screening",
+      "title": "05 · Screen with source-linked evidence",
+      "start_seconds": 148.22,
+      "end_seconds": 189.41
+    },
+    {
+      "id": "review",
+      "title": "06 · Human review and an explicit next step",
+      "start_seconds": 189.41,
+      "end_seconds": 223.62
+    },
+    {
+      "id": "assessment",
+      "title": "07 · Approve a short assessment",
+      "start_seconds": 223.62,
+      "end_seconds": 262.4
+    },
+    {
+      "id": "candidate",
+      "title": "08 · The invite-only candidate experience",
+      "start_seconds": 262.4,
+      "end_seconds": 300.52
+    },
+    {
+      "id": "assessment_review",
+      "title": "09 · Review assessment results separately",
+      "start_seconds": 300.52,
+      "end_seconds": 334.32
+    },
+    {
+      "id": "interview",
+      "title": "10 · Schedule and record a hiring outcome",
+      "start_seconds": 334.32,
+      "end_seconds": 371.98
+    },
+    {
+      "id": "roles",
+      "title": "11 · Role boundaries and operational visibility",
+      "start_seconds": 371.98,
+      "end_seconds": 411.21
+    },
+    {
+      "id": "analytics",
+      "title": "12 · Analytics with clear definitions",
+      "start_seconds": 411.21,
+      "end_seconds": 450.58
+    },
+    {
+      "id": "architecture",
+      "title": "13 · How the application fits together",
+      "start_seconds": 450.58,
+      "end_seconds": 498.77
+    },
+    {
+      "id": "limits",
+      "title": "14 · Honest limits and the portfolio deliverable",
+      "start_seconds": 498.77,
+      "end_seconds": 540
+    }
+  ],
+  "audio_decode_verified": true,
+  "target_duration_seconds": 540,
+  "measured_duration_verified": true,
+  "visual_frames_reviewed": [
+    12,
+    95,
+    195,
+    295,
+    395,
+    495
+  ]
+}

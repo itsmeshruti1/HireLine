@@ -1,0 +1,475 @@
+1
+00:00:00,770 --> 00:00:05,030
+This is Hireline, an evidence-first recruiting workspace. The goal is to take a
+
+2
+00:00:05,030 --> 00:00:09,290
+candidate from a resume to a recorded hiring decision, while keeping the recruiter
+
+3
+00:00:09,290 --> 00:00:13,550
+in control. This recording uses a fresh, isolated database with fictional candidates. No
+
+4
+00:00:13,550 --> 00:00:17,810
+personal resumes, real credentials, or external accounts are involved. The public dashboard is
+
+5
+00:00:17,810 --> 00:00:22,070
+read only. It brings together job openings, the current hiring funnel, evidence-backed candidate
+
+6
+00:00:22,070 --> 00:00:26,330
+matches, and upcoming interviews. The sample workspace contains three software roles and twenty
+
+7
+00:00:26,330 --> 00:00:30,590
+synthetic resumes. A match percentage describes documented evidence against a particular job rubric.
+
+8
+00:00:30,590 --> 00:00:34,850
+It is not a prediction of job performance, and it never makes a
+
+9
+00:00:34,850 --> 00:00:39,110
+hiring decision.
+
+10
+00:00:40,810 --> 00:00:45,440
+After signing in, the recruiter creates an opportunity for a Python platform engineer.
+
+11
+00:00:45,440 --> 00:00:50,070
+A useful screening process starts with explicit expectations. We enter the responsibilities, select
+
+12
+00:00:50,070 --> 00:00:54,700
+the hiring manager, and define weighted criteria for Python, Fast A P I,
+
+13
+00:00:54,700 --> 00:00:59,330
+PostgreSQL, and Kubernetes. The weights total one hundred percent. The application can draft
+
+14
+00:00:59,330 --> 00:01:03,960
+criteria from a description, but a person must check and confirm the rubric
+
+15
+00:01:03,960 --> 00:01:08,590
+before screening is available. This keeps a job description from becoming an unexplained
+
+16
+00:01:08,590 --> 00:01:13,220
+scoring formula. Criteria have versions. If the recruiter changes the rubric later, previous
+
+17
+00:01:13,220 --> 00:01:17,850
+results remain visible, but are marked as stale and require an explicit rescreen.
+
+18
+00:01:19,540 --> 00:01:23,780
+Next, we import two synthetic resumes, one PDF and one Word document. Uploads
+
+19
+00:01:23,780 --> 00:01:28,020
+are limited to small batches, and the recruiter explicitly confirms that the information
+
+20
+00:01:28,020 --> 00:01:32,260
+is fictional. File signatures and size limits are checked at the boundary. Parsing
+
+21
+00:01:32,260 --> 00:01:36,500
+happens in a durable background task rather than holding open a long request.
+
+22
+00:01:36,500 --> 00:01:40,750
+Progress is visible in the interface. A readable document becomes a candidate profile
+
+23
+00:01:40,750 --> 00:01:44,990
+and a job application. Those are separate records, so the same person can
+
+24
+00:01:44,990 --> 00:01:49,230
+be considered for more than one role. This demo deliberately does not perform
+
+25
+00:01:49,230 --> 00:01:53,470
+optical character recognition; scanned or unreadable documents produce a useful correction message.
+
+26
+00:01:55,160 --> 00:01:59,180
+We can now open the extracted candidate profile. Skills, experience, location, notice period,
+
+27
+00:01:59,180 --> 00:02:03,200
+and salary expectations are visible in one place. Notice period and salary are
+
+28
+00:02:03,200 --> 00:02:07,210
+explicit information, not hidden components of the skills score. Original documents remain private
+
+29
+00:02:07,210 --> 00:02:11,230
+and can be downloaded by authorized staff. If extraction makes a mistake, the
+
+30
+00:02:11,230 --> 00:02:15,250
+recruiter can correct the profile. A correction increments its version, preserving older screening
+
+31
+00:02:15,250 --> 00:02:19,260
+results and making it clear when a fresh evaluation is needed. The resume
+
+32
+00:02:19,260 --> 00:02:23,280
+text remains the source of evidence; editing a profile does not silently invent
+
+33
+00:02:23,280 --> 00:02:27,290
+a new source quotation.
+
+34
+00:02:28,990 --> 00:02:33,380
+Starting a screening runs a bounded workflow: evaluate the confirmed criteria, validate the
+
+35
+00:02:33,380 --> 00:02:37,770
+evidence, calculate the score, and pause for human review. In this offline demonstration
+
+36
+00:02:37,770 --> 00:02:42,150
+the result is explicitly labelled Demo matcher. A configured Gemini run is a
+
+37
+00:02:42,150 --> 00:02:46,540
+separate mode and records its model provenance. For every criterion, the interface shows
+
+38
+00:02:46,540 --> 00:02:50,930
+whether evidence is supported, partial, or insufficient. Accepted quotations must actually appear in
+
+39
+00:02:50,930 --> 00:02:55,320
+the extracted document at the stated source segment. Unsupported citations cannot contribute to
+
+40
+00:02:55,320 --> 00:02:59,700
+the score. The weighted calculation is performed by application code, using full credit,
+
+41
+00:02:59,700 --> 00:03:04,090
+half credit, or zero. Missing evidence is shown as an open question, rather
+
+42
+00:03:04,090 --> 00:03:08,480
+than being presented as proof that a candidate lacks a skill.
+
+43
+00:03:10,180 --> 00:03:14,240
+The workflow is now waiting for a recruiter. We inspect the supporting excerpts,
+
+44
+00:03:14,240 --> 00:03:18,310
+note the Kubernetes evidence gap, and record a review. LangGraph checkpoints preserve this
+
+45
+00:03:18,310 --> 00:03:22,370
+pause in persistent storage, so a process restart does not depend on keeping
+
+46
+00:03:22,370 --> 00:03:26,430
+a browser tab open. Approval acknowledges that a person reviewed the screening. It
+
+47
+00:03:26,430 --> 00:03:30,500
+does not shortlist, reject, or contact the candidate. We make the next pipeline
+
+48
+00:03:30,500 --> 00:03:34,560
+change separately and document the reason. This separation is visible in the product:
+
+49
+00:03:34,560 --> 00:03:38,620
+recommendations support a decision, while stage changes are deliberate staff actions. It also
+
+50
+00:03:38,620 --> 00:03:42,690
+leaves an audit trail of what happened and when.
+
+51
+00:03:44,390 --> 00:03:48,510
+A resume cannot answer every question. The recruiter can prepare a short assessment
+
+52
+00:03:48,510 --> 00:03:52,630
+containing multiple choice and written-response questions. The question editor includes the answer key
+
+53
+00:03:52,630 --> 00:03:56,750
+or review rubric, and a person approves the content before an invitation is
+
+54
+00:03:56,750 --> 00:04:00,870
+generated. Multiple choice questions are scored against their keys. Short answers receive advisory
+
+55
+00:04:00,870 --> 00:04:04,990
+feedback and still require human review. These assessment results remain separate from resume
+
+56
+00:04:04,990 --> 00:04:09,110
+screening scores. We create an invitation and copy the candidate link. Tokens are
+
+57
+00:04:09,110 --> 00:04:13,230
+stored as hashes, expire after seven days, and permit one submission. If an
+
+58
+00:04:13,230 --> 00:04:17,350
+unused link is lost or expires, an authorized recruiter can replace it, immediately
+
+59
+00:04:17,350 --> 00:04:21,480
+invalidating the previous link.
+
+60
+00:04:23,170 --> 00:04:27,720
+The candidate sees only the invited questionnaire, not the staff dashboard, answer keys,
+
+61
+00:04:27,720 --> 00:04:32,280
+recruiter notes, or other candidates. Here we answer the two technical questions and
+
+62
+00:04:32,280 --> 00:04:36,830
+describe a fictional engineering example. We also provide an optional interview availability window.
+
+63
+00:04:36,830 --> 00:04:41,380
+The interface states the device timezone, and the server stores offset-aware timestamps. Availability
+
+64
+00:04:41,380 --> 00:04:45,930
+is a preference, not a confirmed booking. Before submitting, the candidate acknowledges that
+
+65
+00:04:45,930 --> 00:04:50,490
+this is a fictional portfolio demonstration and that the form can be submitted
+
+66
+00:04:50,490 --> 00:04:55,040
+only once. The receipt confirms successful recording. Revisiting the link shows that receipt
+
+67
+00:04:55,040 --> 00:04:59,590
+again, while a duplicate submission is rejected by an atomic server-side state transition.
+
+68
+00:05:01,290 --> 00:05:05,300
+Back in the recruiting workspace, the submitted responses and multiple choice result are
+
+69
+00:05:05,300 --> 00:05:09,320
+available to authorized reviewers. Written-answer feedback is clearly advisory. The recruiter reads the
+
+70
+00:05:09,320 --> 00:05:13,330
+responses against the approved rubric and records their own notes. This makes the
+
+71
+00:05:13,330 --> 00:05:17,340
+review inspectable instead of collapsing everything into an unexplained overall score. Candidate invitation
+
+72
+00:05:17,340 --> 00:05:21,360
+access is deliberately narrow, and submitted answers do not appear in the public
+
+73
+00:05:21,360 --> 00:05:25,370
+demo. The assessment review also does not automatically advance the application. The team
+
+74
+00:05:25,370 --> 00:05:29,380
+can use the new evidence to decide whether an interview is worthwhile, while
+
+75
+00:05:29,380 --> 00:05:33,390
+retaining the original screening and its review history.
+
+76
+00:05:35,090 --> 00:05:39,090
+We choose the candidate's submitted availability and confirm an interview. In live configuration,
+
+77
+00:05:39,090 --> 00:05:43,080
+the backend checks Google Calendar before creating an event, uses a stable action
+
+78
+00:05:43,080 --> 00:05:47,080
+identifier, and restricts attendees to owned test accounts. This recording is in preview
+
+79
+00:05:47,080 --> 00:05:51,070
+mode, so the visible receipt is a preview, not a claim that an
+
+80
+00:05:51,070 --> 00:05:55,070
+external event or email was delivered. After the conversation, a hiring team member
+
+81
+00:05:55,070 --> 00:05:59,070
+records concrete, job-relevant feedback. Finally, the recruiter records the fictional hiring outcome with
+
+82
+00:05:59,070 --> 00:06:03,060
+a decision note. The complete journey is now visible: an approved rubric, a
+
+83
+00:06:03,060 --> 00:06:07,060
+parsed resume, source-backed screening, a reviewed assessment, an interview receipt, and a human
+
+84
+00:06:07,060 --> 00:06:11,060
+decision.
+
+85
+00:06:12,750 --> 00:06:17,440
+The workspace has three staff roles. An administrator manages staff access and integration
+
+86
+00:06:17,440 --> 00:06:22,140
+configuration. Recruiters manage jobs, candidates, communication approvals, and stage changes. Hiring managers see
+
+87
+00:06:22,140 --> 00:06:26,830
+assigned jobs and can contribute feedback, but they cannot make recruiter-only changes. These
+
+88
+00:06:26,830 --> 00:06:31,520
+boundaries are checked in Fast A P I, not merely by hiding a
+
+89
+00:06:31,520 --> 00:06:36,210
+button. We switch to a manager account to show the reduced controls. Processing
+
+90
+00:06:36,210 --> 00:06:40,910
+history exposes task outcomes and errors. Safe failed tasks can be retried, while
+
+91
+00:06:40,910 --> 00:06:45,600
+ambiguous outbound delivery requires reconciliation rather than a blind resend. This matters because
+
+92
+00:06:45,600 --> 00:06:50,290
+a workflow checkpoint alone cannot guarantee an external side effect happens exactly once.
+
+93
+00:06:51,980 --> 00:06:56,170
+Analytics separates the current stage distribution from historical reach. The funnel shows where
+
+94
+00:06:56,170 --> 00:07:00,350
+applications are now. Applications reaching each stage measures recorded visits as a percentage
+
+95
+00:07:00,350 --> 00:07:04,540
+of all applications; skipped stages are not guessed. Timing comes from recorded stage
+
+96
+00:07:04,540 --> 00:07:08,720
+transitions, and failures remain visible. The project also includes an evaluation harness comparing
+
+97
+00:07:08,720 --> 00:07:12,910
+the deterministic matcher with a keyword baseline. On the included synthetic dataset, both
+
+98
+00:07:12,910 --> 00:07:17,090
+methods reach the same top-five relevance results for these three jobs. That is
+
+99
+00:07:17,090 --> 00:07:21,280
+useful evidence of the demo's behavior, not proof that an advanced model is
+
+100
+00:07:21,280 --> 00:07:25,470
+better. Extraction, skill recall, and quotation validity are reported separately, with the dataset's
+
+101
+00:07:25,470 --> 00:07:29,650
+limitations.
+
+102
+00:07:31,350 --> 00:07:36,510
+The architecture is a focused modular application. React and TypeScript provide the workspace
+
+103
+00:07:36,510 --> 00:07:41,680
+and candidate forms. Fast A P I owns business access, validation, and permissions.
+
+104
+00:07:41,680 --> 00:07:46,840
+SQLAlchemy and Alembic manage relational data and migrations. A single worker processes leased
+
+105
+00:07:46,840 --> 00:07:52,010
+tasks, while LangGraph checkpoints preserve screening progress and approval pauses. Local development uses
+
+106
+00:07:52,010 --> 00:07:57,180
+SQLite and private local files. The production path uses PostgreSQL, Supabase authentication, and
+
+107
+00:07:57,180 --> 00:08:02,340
+private storage. Google Calendar, Resend, and Gemini are explicit integration adapters. Completed extraction
+
+108
+00:08:02,340 --> 00:08:07,510
+and matching results are persisted to avoid unnecessary calls. No Redis, Celery cluster,
+
+109
+00:08:07,510 --> 00:08:12,680
+vector database, or microservice fleet is required for this scope. The tests cover
+
+110
+00:08:12,680 --> 00:08:17,840
+permissions, duplicate requests, recovery, evidence validation, and the actual browser journey.
+
+111
+00:08:19,540 --> 00:08:23,930
+This version is designed for a strictly free portfolio project. Free hosting can
+
+112
+00:08:23,930 --> 00:08:28,320
+sleep, so queued processing resumes after the service wakes; scheduled reminders are outside
+
+113
+00:08:28,320 --> 00:08:32,720
+this release. Synthetic data is a deliberate boundary for unpaid hosted A I.
+
+114
+00:08:32,720 --> 00:08:37,110
+Live integrations require actual owned accounts, configured credentials, and account-level smoke tests before
+
+115
+00:08:37,110 --> 00:08:41,500
+they can be described as verified. The repository includes setup and deployment guides,
+
+116
+00:08:41,500 --> 00:08:45,900
+database migrations, sample resumes, automated tests, and measured evaluation output. This recording demonstrates
+
+117
+00:08:45,900 --> 00:08:50,290
+the real local application from intake through outcome, while labelling demo matching and
+
+118
+00:08:50,290 --> 00:08:54,680
+preview actions honestly. The result is an inspectable recruiting workflow with a clear
+
+119
+00:08:54,680 --> 00:08:59,070
+path to a small, carefully evaluated live pilot.

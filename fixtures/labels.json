@@ -1,0 +1,34 @@
+{
+  "description": "Author-assigned relevance judgements on fictional software-role resumes; not a validated hiring benchmark.",
+  "relevant_candidates": {
+    "job-backend": [
+      "candidate-01",
+      "candidate-02",
+      "candidate-03",
+      "candidate-04",
+      "candidate-05",
+      "candidate-11",
+      "candidate-12",
+      "candidate-13",
+      "candidate-14"
+    ],
+    "job-frontend": [
+      "candidate-06",
+      "candidate-07",
+      "candidate-08",
+      "candidate-09",
+      "candidate-10",
+      "candidate-11",
+      "candidate-12",
+      "candidate-13",
+      "candidate-14"
+    ],
+    "job-fullstack": [
+      "candidate-11",
+      "candidate-12",
+      "candidate-13",
+      "candidate-14",
+      "candidate-15"
+    ]
+  }
+}

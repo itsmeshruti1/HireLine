@@ -1,0 +1,65 @@
+{
+  "verified_at": "2026-11-10T19:01:05.023Z",
+  "isolated": true,
+  "ai_mode": "demo",
+  "external_mode": "preview",
+  "chapters": [
+    {
+      "id": "overview",
+      "seconds": 1.351
+    },
+    {
+      "id": "job",
+      "seconds": 3.7329999999999997
+    },
+    {
+      "id": "upload",
+      "seconds": 6.893000000000001
+    },
+    {
+      "id": "profile",
+      "seconds": 1.3599999999999994
+    },
+    {
+      "id": "screening",
+      "seconds": 4.865000000000002
+    },
+    {
+      "id": "review",
+      "seconds": 1.668999999999997
+    },
+    {
+      "id": "assessment",
+      "seconds": 0.9120000000000026
+    },
+    {
+      "id": "candidate",
+      "seconds": 1.6129999999999995
+    },
+    {
+      "id": "assessment_review",
+      "seconds": 1.774000000000001
+    },
+    {
+      "id": "interview",
+      "seconds": 7.789999999999999
+    },
+    {
+      "id": "roles",
+      "seconds": 3.679000000000002
+    },
+    {
+      "id": "analytics",
+      "seconds": 0.2849999999999966
+    },
+    {
+      "id": "architecture",
+      "seconds": 0.030000000000001137
+    },
+    {
+      "id": "limits",
+      "seconds": 0.030999999999998806
+    }
+  ],
+  "result": "passed"
+}

@@ -1,0 +1,639 @@
+{
+  "synthetic": true,
+  "jobs": [
+    {
+      "id": "job-backend",
+      "title": "Python Backend Engineer",
+      "department": "Engineering",
+      "location": "Bengaluru / Remote",
+      "employment_type": "Full-time",
+      "description": "Build reliable Python APIs with FastAPI and PostgreSQL. Write automated tests and collaborate with our product team. We value evidence of delivered work.",
+      "criteria": [
+        {
+          "id": "python",
+          "label": "Python",
+          "weight": 35
+        },
+        {
+          "id": "fastapi",
+          "label": "FastAPI",
+          "weight": 25
+        },
+        {
+          "id": "postgresql",
+          "label": "PostgreSQL",
+          "weight": 25
+        },
+        {
+          "id": "testing",
+          "label": "Automated testing",
+          "weight": 15
+        }
+      ]
+    },
+    {
+      "id": "job-frontend",
+      "title": "Frontend Engineer",
+      "department": "Product Engineering",
+      "location": "Pune / Hybrid",
+      "employment_type": "Full-time",
+      "description": "Create accessible React and TypeScript interfaces. Own component testing, responsive design and thoughtful user experiences.",
+      "criteria": [
+        {
+          "id": "react",
+          "label": "React",
+          "weight": 35
+        },
+        {
+          "id": "typescript",
+          "label": "TypeScript",
+          "weight": 25
+        },
+        {
+          "id": "accessibility",
+          "label": "Accessibility",
+          "weight": 20
+        },
+        {
+          "id": "testing",
+          "label": "Automated testing",
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "id": "job-fullstack",
+      "title": "Full-stack Product Engineer",
+      "department": "Platform",
+      "location": "Remote, India",
+      "employment_type": "Full-time",
+      "description": "Ship full-stack features using Python, React and PostgreSQL. Take ownership of deployment and production reliability.",
+      "criteria": [
+        {
+          "id": "python",
+          "label": "Python",
+          "weight": 25
+        },
+        {
+          "id": "react",
+          "label": "React",
+          "weight": 25
+        },
+        {
+          "id": "postgresql",
+          "label": "PostgreSQL",
+          "weight": 25
+        },
+        {
+          "id": "deployment",
+          "label": "Deployment",
+          "weight": 25
+        }
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "id": "candidate-01",
+      "name": "Mira Rowan",
+      "email": "candidate01@example.test",
+      "headline": "Backend engineer",
+      "skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "pytest",
+        "Docker"
+      ],
+      "experience_years": 5,
+      "location": "Bengaluru",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Mira Rowan\ncandidate01@example.test\nBackend engineer\nLocation: Bengaluru\nExperience: 5 years\nSkills: Python, FastAPI, PostgreSQL, pytest, Docker\n\nProject experience\nBuilt Python order APIs using FastAPI and PostgreSQL. Added automated testing with pytest and reduced API error rates through integration tests.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Mira Rowan\ncandidate01@example.test\nBackend engineer\nLocation: Bengaluru\nExperience: 5 years\nSkills: Python, FastAPI, PostgreSQL, pytest, Docker\n\nProject experience\nBuilt Python order APIs using FastAPI and PostgreSQL. Added automated testing with pytest and reduced API error rates through integration tests.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-backend",
+      "stage": "shortlisted",
+      "sample_file": "samples/resumes/candidate-01.pdf"
+    },
+    {
+      "id": "candidate-02",
+      "name": "Arjun Vale",
+      "email": "candidate02@example.test",
+      "headline": "Python API engineer",
+      "skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "unittest"
+      ],
+      "experience_years": 4,
+      "location": "Hyderabad",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Arjun Vale\ncandidate02@example.test\nPython API engineer\nLocation: Hyderabad\nExperience: 4 years\nSkills: Python, FastAPI, PostgreSQL, unittest\n\nProject experience\nDelivered FastAPI services in Python backed by PostgreSQL. Maintained automated testing with unittest and contract tests.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Arjun Vale\ncandidate02@example.test\nPython API engineer\nLocation: Hyderabad\nExperience: 4 years\nSkills: Python, FastAPI, PostgreSQL, unittest\n\nProject experience\nDelivered FastAPI services in Python backed by PostgreSQL. Maintained automated testing with unittest and contract tests.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-backend",
+      "stage": "assessment",
+      "sample_file": "samples/resumes/candidate-02.docx"
+    },
+    {
+      "id": "candidate-03",
+      "name": "Nila Hart",
+      "email": "candidate03@example.test",
+      "headline": "Platform developer",
+      "skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "pytest",
+        "CI/CD"
+      ],
+      "experience_years": 6,
+      "location": "Pune",
+      "notice_period_days": 60,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Nila Hart\ncandidate03@example.test\nPlatform developer\nLocation: Pune\nExperience: 6 years\nSkills: Python, FastAPI, PostgreSQL, pytest, CI/CD\n\nProject experience\nOwned Python payment processing with FastAPI and PostgreSQL migrations. Established automated testing and CI/CD deployment pipelines.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Nila Hart\ncandidate03@example.test\nPlatform developer\nLocation: Pune\nExperience: 6 years\nSkills: Python, FastAPI, PostgreSQL, pytest, CI/CD\n\nProject experience\nOwned Python payment processing with FastAPI and PostgreSQL migrations. Established automated testing and CI/CD deployment pipelines.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-backend",
+      "stage": "interview",
+      "sample_file": "samples/resumes/candidate-03.pdf"
+    },
+    {
+      "id": "candidate-04",
+      "name": "Dev Mercer",
+      "email": "candidate04@example.test",
+      "headline": "Backend developer",
+      "skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "experience_years": 3,
+      "location": "Chennai",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Dev Mercer\ncandidate04@example.test\nBackend developer\nLocation: Chennai\nExperience: 3 years\nSkills: Python, FastAPI, PostgreSQL, Docker\n\nProject experience\nBuilt Python reporting services with FastAPI, SQL transactions in PostgreSQL and deployment with Docker. Testing responsibilities were shared with a separate team.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Dev Mercer\ncandidate04@example.test\nBackend developer\nLocation: Chennai\nExperience: 3 years\nSkills: Python, FastAPI, PostgreSQL, Docker\n\nProject experience\nBuilt Python reporting services with FastAPI, SQL transactions in PostgreSQL and deployment with Docker. Testing responsibilities were shared with a separate team.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-backend",
+      "stage": "screening",
+      "sample_file": "samples/resumes/candidate-04.docx"
+    },
+    {
+      "id": "candidate-05",
+      "name": "Tara Finch",
+      "email": "candidate05@example.test",
+      "headline": "API developer",
+      "skills": [
+        "Python",
+        "Django",
+        "PostgreSQL",
+        "pytest"
+      ],
+      "experience_years": 4,
+      "location": "Remote",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Tara Finch\ncandidate05@example.test\nAPI developer\nLocation: Remote\nExperience: 4 years\nSkills: Python, Django, PostgreSQL, pytest\n\nProject experience\nMaintained Python and Django APIs with PostgreSQL. Wrote automated testing suites using pytest. No FastAPI project is described.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Tara Finch\ncandidate05@example.test\nAPI developer\nLocation: Remote\nExperience: 4 years\nSkills: Python, Django, PostgreSQL, pytest\n\nProject experience\nMaintained Python and Django APIs with PostgreSQL. Wrote automated testing suites using pytest. No FastAPI project is described.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-backend",
+      "stage": "new",
+      "sample_file": "samples/resumes/candidate-05.pdf"
+    },
+    {
+      "id": "candidate-06",
+      "name": "Ishan Brook",
+      "email": "candidate06@example.test",
+      "headline": "Frontend engineer",
+      "skills": [
+        "React",
+        "TypeScript",
+        "Accessibility",
+        "Playwright"
+      ],
+      "experience_years": 4,
+      "location": "Pune",
+      "notice_period_days": 60,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Ishan Brook\ncandidate06@example.test\nFrontend engineer\nLocation: Pune\nExperience: 4 years\nSkills: React, TypeScript, Accessibility, Playwright\n\nProject experience\nBuilt React applications in TypeScript. Led accessibility work with keyboard navigation and screen-reader checks. Added automated testing with Playwright.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Ishan Brook\ncandidate06@example.test\nFrontend engineer\nLocation: Pune\nExperience: 4 years\nSkills: React, TypeScript, Accessibility, Playwright\n\nProject experience\nBuilt React applications in TypeScript. Led accessibility work with keyboard navigation and screen-reader checks. Added automated testing with Playwright.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-frontend",
+      "stage": "shortlisted",
+      "sample_file": "samples/resumes/candidate-06.docx"
+    },
+    {
+      "id": "candidate-07",
+      "name": "Rhea Linden",
+      "email": "candidate07@example.test",
+      "headline": "UI engineer",
+      "skills": [
+        "React",
+        "TypeScript",
+        "Accessibility",
+        "Vitest"
+      ],
+      "experience_years": 5,
+      "location": "Bengaluru",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Rhea Linden\ncandidate07@example.test\nUI engineer\nLocation: Bengaluru\nExperience: 5 years\nSkills: React, TypeScript, Accessibility, Vitest\n\nProject experience\nShipped React and TypeScript design-system components. Improved accessibility with semantic HTML and maintained automated testing using Vitest.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Rhea Linden\ncandidate07@example.test\nUI engineer\nLocation: Bengaluru\nExperience: 5 years\nSkills: React, TypeScript, Accessibility, Vitest\n\nProject experience\nShipped React and TypeScript design-system components. Improved accessibility with semantic HTML and maintained automated testing using Vitest.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-frontend",
+      "stage": "assessment",
+      "sample_file": "samples/resumes/candidate-07.pdf"
+    },
+    {
+      "id": "candidate-08",
+      "name": "Kabir Reed",
+      "email": "candidate08@example.test",
+      "headline": "Frontend developer",
+      "skills": [
+        "React",
+        "TypeScript",
+        "Accessibility",
+        "Jest"
+      ],
+      "experience_years": 3,
+      "location": "Delhi",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Kabir Reed\ncandidate08@example.test\nFrontend developer\nLocation: Delhi\nExperience: 3 years\nSkills: React, TypeScript, Accessibility, Jest\n\nProject experience\nCreated React dashboards with TypeScript, accessibility reviews and automated testing in Jest.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Kabir Reed\ncandidate08@example.test\nFrontend developer\nLocation: Delhi\nExperience: 3 years\nSkills: React, TypeScript, Accessibility, Jest\n\nProject experience\nCreated React dashboards with TypeScript, accessibility reviews and automated testing in Jest.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-frontend",
+      "stage": "interview",
+      "sample_file": "samples/resumes/candidate-08.docx"
+    },
+    {
+      "id": "candidate-09",
+      "name": "Anya Frost",
+      "email": "candidate09@example.test",
+      "headline": "Product UI developer",
+      "skills": [
+        "React",
+        "TypeScript",
+        "CSS",
+        "Vitest"
+      ],
+      "experience_years": 2,
+      "location": "Remote",
+      "notice_period_days": 60,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Anya Frost\ncandidate09@example.test\nProduct UI developer\nLocation: Remote\nExperience: 2 years\nSkills: React, TypeScript, CSS, Vitest\n\nProject experience\nImplemented React interfaces and TypeScript state management. Added automated testing with Vitest and responsive CSS layouts.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Anya Frost\ncandidate09@example.test\nProduct UI developer\nLocation: Remote\nExperience: 2 years\nSkills: React, TypeScript, CSS, Vitest\n\nProject experience\nImplemented React interfaces and TypeScript state management. Added automated testing with Vitest and responsive CSS layouts.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-frontend",
+      "stage": "screening",
+      "sample_file": "samples/resumes/candidate-09.pdf"
+    },
+    {
+      "id": "candidate-10",
+      "name": "Neil Arbor",
+      "email": "candidate10@example.test",
+      "headline": "Web engineer",
+      "skills": [
+        "React",
+        "JavaScript",
+        "Accessibility",
+        "Cypress"
+      ],
+      "experience_years": 3,
+      "location": "Mumbai",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Neil Arbor\ncandidate10@example.test\nWeb engineer\nLocation: Mumbai\nExperience: 3 years\nSkills: React, JavaScript, Accessibility, Cypress\n\nProject experience\nBuilt React applications in JavaScript with accessibility improvements. Automated testing in Cypress covers major user journeys.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Neil Arbor\ncandidate10@example.test\nWeb engineer\nLocation: Mumbai\nExperience: 3 years\nSkills: React, JavaScript, Accessibility, Cypress\n\nProject experience\nBuilt React applications in JavaScript with accessibility improvements. Automated testing in Cypress covers major user journeys.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-frontend",
+      "stage": "new",
+      "sample_file": "samples/resumes/candidate-10.docx"
+    },
+    {
+      "id": "candidate-11",
+      "name": "Sana Wren",
+      "email": "candidate11@example.test",
+      "headline": "Full-stack engineer",
+      "skills": [
+        "Python",
+        "React",
+        "PostgreSQL",
+        "Docker",
+        "Deployment"
+      ],
+      "experience_years": 5,
+      "location": "Remote",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Sana Wren\ncandidate11@example.test\nFull-stack engineer\nLocation: Remote\nExperience: 5 years\nSkills: Python, React, PostgreSQL, Docker, Deployment\n\nProject experience\nDelivered Python APIs and React interfaces using PostgreSQL. Owned deployment using Docker and GitHub Actions.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Sana Wren\ncandidate11@example.test\nFull-stack engineer\nLocation: Remote\nExperience: 5 years\nSkills: Python, React, PostgreSQL, Docker, Deployment\n\nProject experience\nDelivered Python APIs and React interfaces using PostgreSQL. Owned deployment using Docker and GitHub Actions.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-fullstack",
+      "stage": "shortlisted",
+      "sample_file": "samples/resumes/candidate-11.pdf"
+    },
+    {
+      "id": "candidate-12",
+      "name": "Vihaan Alder",
+      "email": "candidate12@example.test",
+      "headline": "Product engineer",
+      "skills": [
+        "Python",
+        "React",
+        "PostgreSQL",
+        "Deployment"
+      ],
+      "experience_years": 4,
+      "location": "Bengaluru",
+      "notice_period_days": 60,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Vihaan Alder\ncandidate12@example.test\nProduct engineer\nLocation: Bengaluru\nExperience: 4 years\nSkills: Python, React, PostgreSQL, Deployment\n\nProject experience\nBuilt Python and React product features. Designed PostgreSQL schemas and managed deployment and rollback procedures.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Vihaan Alder\ncandidate12@example.test\nProduct engineer\nLocation: Bengaluru\nExperience: 4 years\nSkills: Python, React, PostgreSQL, Deployment\n\nProject experience\nBuilt Python and React product features. Designed PostgreSQL schemas and managed deployment and rollback procedures.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-fullstack",
+      "stage": "assessment",
+      "sample_file": "samples/resumes/candidate-12.docx"
+    },
+    {
+      "id": "candidate-13",
+      "name": "Leah Cove",
+      "email": "candidate13@example.test",
+      "headline": "Full-stack developer",
+      "skills": [
+        "Python",
+        "React",
+        "PostgreSQL",
+        "CI/CD"
+      ],
+      "experience_years": 3,
+      "location": "Pune",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Leah Cove\ncandidate13@example.test\nFull-stack developer\nLocation: Pune\nExperience: 3 years\nSkills: Python, React, PostgreSQL, CI/CD\n\nProject experience\nShipped Python backend features, React pages and PostgreSQL queries. Operated CI/CD deployment workflows.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Leah Cove\ncandidate13@example.test\nFull-stack developer\nLocation: Pune\nExperience: 3 years\nSkills: Python, React, PostgreSQL, CI/CD\n\nProject experience\nShipped Python backend features, React pages and PostgreSQL queries. Operated CI/CD deployment workflows.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-fullstack",
+      "stage": "hired",
+      "sample_file": "samples/resumes/candidate-13.pdf"
+    },
+    {
+      "id": "candidate-14",
+      "name": "Aadi Quinn",
+      "email": "candidate14@example.test",
+      "headline": "Application engineer",
+      "skills": [
+        "Python",
+        "React",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "experience_years": 2,
+      "location": "Hyderabad",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Aadi Quinn\ncandidate14@example.test\nApplication engineer\nLocation: Hyderabad\nExperience: 2 years\nSkills: Python, React, PostgreSQL, Docker\n\nProject experience\nDeveloped Python services and React forms backed by PostgreSQL. Helped deployment with Docker in a supervised project.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Aadi Quinn\ncandidate14@example.test\nApplication engineer\nLocation: Hyderabad\nExperience: 2 years\nSkills: Python, React, PostgreSQL, Docker\n\nProject experience\nDeveloped Python services and React forms backed by PostgreSQL. Helped deployment with Docker in a supervised project.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-fullstack",
+      "stage": "screening",
+      "sample_file": "samples/resumes/candidate-14.docx"
+    },
+    {
+      "id": "candidate-15",
+      "name": "Zoya Elm",
+      "email": "candidate15@example.test",
+      "headline": "Web application developer",
+      "skills": [
+        "Python",
+        "React",
+        "SQLite",
+        "Deployment"
+      ],
+      "experience_years": 3,
+      "location": "Remote",
+      "notice_period_days": 60,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Zoya Elm\ncandidate15@example.test\nWeb application developer\nLocation: Remote\nExperience: 3 years\nSkills: Python, React, SQLite, Deployment\n\nProject experience\nCreated Python and React web applications with SQLite. Owned deployment to a hosted container platform.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Zoya Elm\ncandidate15@example.test\nWeb application developer\nLocation: Remote\nExperience: 3 years\nSkills: Python, React, SQLite, Deployment\n\nProject experience\nCreated Python and React web applications with SQLite. Owned deployment to a hosted container platform.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-fullstack",
+      "stage": "new",
+      "sample_file": "samples/resumes/candidate-15.pdf"
+    },
+    {
+      "id": "candidate-16",
+      "name": "Omar Birch",
+      "email": "candidate16@example.test",
+      "headline": "Data analyst",
+      "skills": [
+        "Python",
+        "pandas",
+        "SQL",
+        "Tableau"
+      ],
+      "experience_years": 2,
+      "location": "Delhi",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Omar Birch\ncandidate16@example.test\nData analyst\nLocation: Delhi\nExperience: 2 years\nSkills: Python, pandas, SQL, Tableau\n\nProject experience\nAnalyzed synthetic sales data with Python and pandas. Built Tableau dashboards and SQL reports.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Omar Birch\ncandidate16@example.test\nData analyst\nLocation: Delhi\nExperience: 2 years\nSkills: Python, pandas, SQL, Tableau\n\nProject experience\nAnalyzed synthetic sales data with Python and pandas. Built Tableau dashboards and SQL reports.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-backend",
+      "stage": "new",
+      "sample_file": "samples/resumes/candidate-16.docx"
+    },
+    {
+      "id": "candidate-17",
+      "name": "Pia Moss",
+      "email": "candidate17@example.test",
+      "headline": "Java services developer",
+      "skills": [
+        "Java",
+        "Spring",
+        "MySQL",
+        "JUnit"
+      ],
+      "experience_years": 4,
+      "location": "Chennai",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Pia Moss\ncandidate17@example.test\nJava services developer\nLocation: Chennai\nExperience: 4 years\nSkills: Java, Spring, MySQL, JUnit\n\nProject experience\nDelivered Java services using Spring and MySQL. Wrote JUnit integration tests for billing workflows.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Pia Moss\ncandidate17@example.test\nJava services developer\nLocation: Chennai\nExperience: 4 years\nSkills: Java, Spring, MySQL, JUnit\n\nProject experience\nDelivered Java services using Spring and MySQL. Wrote JUnit integration tests for billing workflows.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-backend",
+      "stage": "rejected",
+      "sample_file": "samples/resumes/candidate-17.pdf"
+    },
+    {
+      "id": "candidate-18",
+      "name": "Evan Lake",
+      "email": "candidate18@example.test",
+      "headline": "UX designer",
+      "skills": [
+        "Figma",
+        "Research",
+        "Accessibility",
+        "HTML"
+      ],
+      "experience_years": 3,
+      "location": "Mumbai",
+      "notice_period_days": 60,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Evan Lake\ncandidate18@example.test\nUX designer\nLocation: Mumbai\nExperience: 3 years\nSkills: Figma, Research, Accessibility, HTML\n\nProject experience\nDesigned Figma prototypes, conducted research and audited accessibility of semantic HTML prototypes.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Evan Lake\ncandidate18@example.test\nUX designer\nLocation: Mumbai\nExperience: 3 years\nSkills: Figma, Research, Accessibility, HTML\n\nProject experience\nDesigned Figma prototypes, conducted research and audited accessibility of semantic HTML prototypes.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 60 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-frontend",
+      "stage": "new",
+      "sample_file": "samples/resumes/candidate-18.docx"
+    },
+    {
+      "id": "candidate-19",
+      "name": "Kira Ash",
+      "email": "candidate19@example.test",
+      "headline": "Mobile developer",
+      "skills": [
+        "Flutter",
+        "Dart",
+        "Firebase"
+      ],
+      "experience_years": 2,
+      "location": "Pune",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Kira Ash\ncandidate19@example.test\nMobile developer\nLocation: Pune\nExperience: 2 years\nSkills: Flutter, Dart, Firebase\n\nProject experience\nDeveloped Flutter applications in Dart using Firebase authentication and offline storage.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Kira Ash\ncandidate19@example.test\nMobile developer\nLocation: Pune\nExperience: 2 years\nSkills: Flutter, Dart, Firebase\n\nProject experience\nDeveloped Flutter applications in Dart using Firebase authentication and offline storage.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-frontend",
+      "stage": "withdrawn",
+      "sample_file": "samples/resumes/candidate-19.pdf"
+    },
+    {
+      "id": "candidate-20",
+      "name": "Rohan Fern",
+      "email": "candidate20@example.test",
+      "headline": "Infrastructure engineer",
+      "skills": [
+        "Go",
+        "Kubernetes",
+        "Terraform",
+        "Deployment"
+      ],
+      "experience_years": 5,
+      "location": "Remote",
+      "notice_period_days": 30,
+      "salary_expectation": "Discuss with recruiter.",
+      "profile_version": 1,
+      "resume_text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Rohan Fern\ncandidate20@example.test\nInfrastructure engineer\nLocation: Remote\nExperience: 5 years\nSkills: Go, Kubernetes, Terraform, Deployment\n\nProject experience\nOperated Go services on Kubernetes. Automated infrastructure deployment with Terraform and rollback drills.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations.",
+      "segments": [
+        {
+          "id": "page-1",
+          "text": "SYNTHETIC PORTFOLIO RESUME - FICTIONAL PERSON\nName: Rohan Fern\ncandidate20@example.test\nInfrastructure engineer\nLocation: Remote\nExperience: 5 years\nSkills: Go, Kubernetes, Terraform, Deployment\n\nProject experience\nOperated Go services on Kubernetes. Automated infrastructure deployment with Terraform and rollback drills.\n\nEducation: Example Institute, software studies. Fictional institution.\nNotice period: 30 days\nSalary expectation: Discuss with recruiter.\nThis document is synthetic and may be used for portfolio demonstrations."
+        }
+      ],
+      "job_id": "job-fullstack",
+      "stage": "new",
+      "sample_file": "samples/resumes/candidate-20.docx"
+    }
+  ]
+}

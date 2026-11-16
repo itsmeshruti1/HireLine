@@ -1,0 +1,77 @@
+{
+  "title": "Hireline — an evidence-first recruiting workflow",
+  "target_seconds": 540,
+  "voice": "Microsoft Zira Desktop",
+  "chapters": [
+    {
+      "id": "overview",
+      "title": "01 · A workspace for thoughtful hiring",
+      "text": "This is Hireline, an evidence-first recruiting workspace. The goal is to take a candidate from a resume to a recorded hiring decision, while keeping the recruiter in control. This recording uses a fresh, isolated database with fictional candidates. No personal resumes, real credentials, or external accounts are involved. The public dashboard is read only. It brings together job openings, the current hiring funnel, evidence-backed candidate matches, and upcoming interviews. The sample workspace contains three software roles and twenty synthetic resumes. A match percentage describes documented evidence against a particular job rubric. It is not a prediction of job performance, and it never makes a hiring decision."
+    },
+    {
+      "id": "job",
+      "title": "02 · Define and approve the job rubric",
+      "text": "After signing in, the recruiter creates an opportunity for a Python platform engineer. A useful screening process starts with explicit expectations. We enter the responsibilities, select the hiring manager, and define weighted criteria for Python, Fast A P I, PostgreSQL, and Kubernetes. The weights total one hundred percent. The application can draft criteria from a description, but a person must check and confirm the rubric before screening is available. This keeps a job description from becoming an unexplained scoring formula. Criteria have versions. If the recruiter changes the rubric later, previous results remain visible, but are marked as stale and require an explicit rescreen."
+    },
+    {
+      "id": "upload",
+      "title": "03 · Import PDF and DOCX resumes",
+      "text": "Next, we import two synthetic resumes, one PDF and one Word document. Uploads are limited to small batches, and the recruiter explicitly confirms that the information is fictional. File signatures and size limits are checked at the boundary. Parsing happens in a durable background task rather than holding open a long request. Progress is visible in the interface. A readable document becomes a candidate profile and a job application. Those are separate records, so the same person can be considered for more than one role. This demo deliberately does not perform optical character recognition; scanned or unreadable documents produce a useful correction message."
+    },
+    {
+      "id": "profile",
+      "title": "04 · Inspect and correct the extracted profile",
+      "text": "We can now open the extracted candidate profile. Skills, experience, location, notice period, and salary expectations are visible in one place. Notice period and salary are explicit information, not hidden components of the skills score. Original documents remain private and can be downloaded by authorized staff. If extraction makes a mistake, the recruiter can correct the profile. A correction increments its version, preserving older screening results and making it clear when a fresh evaluation is needed. The resume text remains the source of evidence; editing a profile does not silently invent a new source quotation."
+    },
+    {
+      "id": "screening",
+      "title": "05 · Screen with source-linked evidence",
+      "text": "Starting a screening runs a bounded workflow: evaluate the confirmed criteria, validate the evidence, calculate the score, and pause for human review. In this offline demonstration the result is explicitly labelled Demo matcher. A configured Gemini run is a separate mode and records its model provenance. For every criterion, the interface shows whether evidence is supported, partial, or insufficient. Accepted quotations must actually appear in the extracted document at the stated source segment. Unsupported citations cannot contribute to the score. The weighted calculation is performed by application code, using full credit, half credit, or zero. Missing evidence is shown as an open question, rather than being presented as proof that a candidate lacks a skill."
+    },
+    {
+      "id": "review",
+      "title": "06 · Human review and an explicit next step",
+      "text": "The workflow is now waiting for a recruiter. We inspect the supporting excerpts, note the Kubernetes evidence gap, and record a review. LangGraph checkpoints preserve this pause in persistent storage, so a process restart does not depend on keeping a browser tab open. Approval acknowledges that a person reviewed the screening. It does not shortlist, reject, or contact the candidate. We make the next pipeline change separately and document the reason. This separation is visible in the product: recommendations support a decision, while stage changes are deliberate staff actions. It also leaves an audit trail of what happened and when."
+    },
+    {
+      "id": "assessment",
+      "title": "07 · Approve a short assessment",
+      "text": "A resume cannot answer every question. The recruiter can prepare a short assessment containing multiple choice and written-response questions. The question editor includes the answer key or review rubric, and a person approves the content before an invitation is generated. Multiple choice questions are scored against their keys. Short answers receive advisory feedback and still require human review. These assessment results remain separate from resume screening scores. We create an invitation and copy the candidate link. Tokens are stored as hashes, expire after seven days, and permit one submission. If an unused link is lost or expires, an authorized recruiter can replace it, immediately invalidating the previous link."
+    },
+    {
+      "id": "candidate",
+      "title": "08 · The invite-only candidate experience",
+      "text": "The candidate sees only the invited questionnaire, not the staff dashboard, answer keys, recruiter notes, or other candidates. Here we answer the two technical questions and describe a fictional engineering example. We also provide an optional interview availability window. The interface states the device timezone, and the server stores offset-aware timestamps. Availability is a preference, not a confirmed booking. Before submitting, the candidate acknowledges that this is a fictional portfolio demonstration and that the form can be submitted only once. The receipt confirms successful recording. Revisiting the link shows that receipt again, while a duplicate submission is rejected by an atomic server-side state transition."
+    },
+    {
+      "id": "assessment_review",
+      "title": "09 · Review assessment results separately",
+      "text": "Back in the recruiting workspace, the submitted responses and multiple choice result are available to authorized reviewers. Written-answer feedback is clearly advisory. The recruiter reads the responses against the approved rubric and records their own notes. This makes the review inspectable instead of collapsing everything into an unexplained overall score. Candidate invitation access is deliberately narrow, and submitted answers do not appear in the public demo. The assessment review also does not automatically advance the application. The team can use the new evidence to decide whether an interview is worthwhile, while retaining the original screening and its review history."
+    },
+    {
+      "id": "interview",
+      "title": "10 · Schedule and record a hiring outcome",
+      "text": "We choose the candidate's submitted availability and confirm an interview. In live configuration, the backend checks Google Calendar before creating an event, uses a stable action identifier, and restricts attendees to owned test accounts. This recording is in preview mode, so the visible receipt is a preview, not a claim that an external event or email was delivered. After the conversation, a hiring team member records concrete, job-relevant feedback. Finally, the recruiter records the fictional hiring outcome with a decision note. The complete journey is now visible: an approved rubric, a parsed resume, source-backed screening, a reviewed assessment, an interview receipt, and a human decision."
+    },
+    {
+      "id": "roles",
+      "title": "11 · Role boundaries and operational visibility",
+      "text": "The workspace has three staff roles. An administrator manages staff access and integration configuration. Recruiters manage jobs, candidates, communication approvals, and stage changes. Hiring managers see assigned jobs and can contribute feedback, but they cannot make recruiter-only changes. These boundaries are checked in Fast A P I, not merely by hiding a button. We switch to a manager account to show the reduced controls. Processing history exposes task outcomes and errors. Safe failed tasks can be retried, while ambiguous outbound delivery requires reconciliation rather than a blind resend. This matters because a workflow checkpoint alone cannot guarantee an external side effect happens exactly once."
+    },
+    {
+      "id": "analytics",
+      "title": "12 · Analytics with clear definitions",
+      "text": "Analytics separates the current stage distribution from historical reach. The funnel shows where applications are now. Applications reaching each stage measures recorded visits as a percentage of all applications; skipped stages are not guessed. Timing comes from recorded stage transitions, and failures remain visible. The project also includes an evaluation harness comparing the deterministic matcher with a keyword baseline. On the included synthetic dataset, both methods reach the same top-five relevance results for these three jobs. That is useful evidence of the demo's behavior, not proof that an advanced model is better. Extraction, skill recall, and quotation validity are reported separately, with the dataset's limitations."
+    },
+    {
+      "id": "architecture",
+      "title": "13 · How the application fits together",
+      "text": "The architecture is a focused modular application. React and TypeScript provide the workspace and candidate forms. Fast A P I owns business access, validation, and permissions. SQLAlchemy and Alembic manage relational data and migrations. A single worker processes leased tasks, while LangGraph checkpoints preserve screening progress and approval pauses. Local development uses SQLite and private local files. The production path uses PostgreSQL, Supabase authentication, and private storage. Google Calendar, Resend, and Gemini are explicit integration adapters. Completed extraction and matching results are persisted to avoid unnecessary calls. No Redis, Celery cluster, vector database, or microservice fleet is required for this scope. The tests cover permissions, duplicate requests, recovery, evidence validation, and the actual browser journey."
+    },
+    {
+      "id": "limits",
+      "title": "14 · Honest limits and the portfolio deliverable",
+      "text": "This version is designed for a strictly free portfolio project. Free hosting can sleep, so queued processing resumes after the service wakes; scheduled reminders are outside this release. Synthetic data is a deliberate boundary for unpaid hosted A I. Live integrations require actual owned accounts, configured credentials, and account-level smoke tests before they can be described as verified. The repository includes setup and deployment guides, database migrations, sample resumes, automated tests, and measured evaluation output. This recording demonstrates the real local application from intake through outcome, while labelling demo matching and preview actions honestly. The result is an inspectable recruiting workflow with a clear path to a small, carefully evaluated live pilot."
+    }
+  ]
+}

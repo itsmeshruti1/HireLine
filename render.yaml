@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: hireline-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: AUTH_MODE
+        value: supabase
+      - key: AI_MODE
+        value: demo
+      - key: EXTERNAL_MODE
+        value: preview
+      - key: APP_SECRET
+        generateValue: true
+      - key: SEED_DEMO
+        value: true
+      - key: DATABASE_URL
+        sync: false
+      - key: CHECKPOINT_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: API_URL
+        sync: false
+  - type: web
+    name: hireline-web
+    runtime: static
+    buildCommand: cd frontend && npm ci && npm run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        sync: false
