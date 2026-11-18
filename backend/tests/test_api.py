@@ -44,6 +44,100 @@ def process(app, settings):
 QUESTIONS = [{"id": "q1", "kind": "mcq", "prompt": "Which status means created?", "options": ["201", "404"], "answer": "201"}, {"id": "q2", "kind": "short", "prompt": "How would you handle API retries?", "rubric": "Discuss idempotency and bounded retries."}]
 
 
+def test_login_preserves_password_whitespace():
+    from backend.app.schemas import Login
+    credentials = Login(email=" admin@example.test ", password=" passphrase ")
+    assert credentials.email == "admin@example.test"
+    assert credentials.password == " passphrase "
+
+
+@pytest.mark.parametrize("options", [["201", "201"], ["201", " "], ["201", "x" * 2001]])
+def test_ambiguous_or_unbounded_mcq_options_are_rejected(workspace, options):
+    client, _, _ = workspace
+    response = client.post("/api/applications/a1/assessment", headers=headers(client), json={"questions": [{**QUESTIONS[0], "options": options}]})
+    assert response.status_code == 422
+
+
+def test_calendar_query_cannot_exceed_seven_days(workspace):
+    client, _, _ = workspace
+    start = now() + timedelta(days=1)
+    response = client.get("/api/integrations/calendar/freebusy", headers=headers(client), params={"start": start.isoformat(), "end": (start + timedelta(days=7, seconds=1)).isoformat()})
+    assert response.status_code == 422
+
+
+def test_duplicate_interview_returns_its_original_task(workspace):
+    client, _, _ = workspace
+    auth = headers(client)
+    start = now() + timedelta(days=1)
+    first_slot = {"start": start.isoformat(), "end": (start + timedelta(minutes=30)).isoformat(), "timezone": "UTC"}
+    second_slot = {"start": (start + timedelta(days=1)).isoformat(), "end": (start + timedelta(days=1, minutes=30)).isoformat(), "timezone": "UTC"}
+    first = client.post("/api/applications/a1/interviews", headers=auth, json=first_slot)
+    second = client.post("/api/applications/a1/interviews", headers=auth, json=second_slot)
+    duplicate = client.post("/api/applications/a1/interviews", headers=auth, json=first_slot)
+    assert first.status_code == second.status_code == duplicate.status_code == 202
+    assert duplicate.json()["job_id"] == first.json()["job_id"]
+    assert duplicate.json()["job_id"] != second.json()["job_id"]
+
+
+def test_concurrent_reviews_enqueue_once(workspace):
+    from concurrent.futures import ThreadPoolExecutor
+    client, app, settings = workspace
+    auth = headers(client)
+    screening = client.post("/api/applications/a1/screen", headers=auth).json()
+    process(app, settings)
+    def review(_):
+        return client.post(f"/api/screenings/{screening['screening_id']}/review", headers=auth, json={"approved": True, "notes": "Verified source"})
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(review, range(2)))
+    assert sorted(result.status_code for result in results) == [202, 409]
+    with app.state.session_factory() as session:
+        assert len(list(session.scalars(select(BackgroundJob).where(BackgroundJob.kind == "screen_review")))) == 1
+
+
+@pytest.mark.parametrize("change", ["token", "expiry"])
+def test_invitation_changed_during_submission_cannot_be_used(workspace, monkeypatch, change):
+    from sqlalchemy import update
+    from sqlalchemy.orm import Session
+    from sqlalchemy.sql.dml import Update
+    client, app, _ = workspace
+    invited = client.post("/api/applications/a1/assessment", headers=headers(client), json={"questions": QUESTIONS}).json()
+    token = invited["invite_url"].split("/")[-1]
+    original_execute = Session.execute
+    changed = False
+
+    def execute(session, statement, *args, **kwargs):
+        nonlocal changed
+        if not changed and isinstance(statement, Update) and statement.table.name == "assessments":
+            changed = True
+            values = {"token_hash": "replacement-token"} if change == "token" else {"expires_at": now() - timedelta(seconds=1)}
+            with app.state.engine.begin() as connection:
+                connection.execute(update(Assessment).where(Assessment.id == invited["assessment"]["id"]).values(**values))
+        return original_execute(session, statement, *args, **kwargs)
+
+    monkeypatch.setattr(Session, "execute", execute)
+    result = client.post("/api/invitations/" + token, json={"answers": {"q1": "201", "q2": "Use bounded retries"}})
+    assert changed and result.status_code == 409
+    with app.state.session_factory() as session:
+        assessment = session.get(Assessment, invited["assessment"]["id"])
+        assert assessment.status == "invited" and not assessment.answers
+        assert not session.scalar(select(BackgroundJob).where(BackgroundJob.kind == "assessment_feedback"))
+
+
+def test_concurrent_admin_demotions_retain_one_admin(workspace):
+    from concurrent.futures import ThreadPoolExecutor
+    client, app, _ = workspace
+    auth = headers(client, "admin")
+    assert client.patch("/api/staff/recruiter", headers=auth, json={"role": "admin"}).status_code == 200
+    def demote(identifier):
+        return client.patch(f"/api/staff/{identifier}", headers=auth, json={"role": "manager"})
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(demote, ["admin", "recruiter"]))
+    assert sum(response.status_code == 200 for response in results) == 1
+    assert all(response.status_code in {200, 403, 409} for response in results)
+    with app.state.session_factory() as session:
+        assert len(list(session.scalars(select(User).where(User.role == "admin")))) == 1
+
+
 def test_full_workflow_persists_review_then_assessment_and_interview(workspace):
     client, app, settings = workspace
     auth = headers(client)

@@ -1,29 +1,691 @@
-import { useState } from 'react';
-import { ArrowRight, CalendarDays, CheckCircle2, Clock3, FileCheck2, FileText, Mail, MapPin, MessageSquare, Pencil, Play, Plus, ShieldCheck, Sparkles } from 'lucide-react';
-import { downloadDocument, post } from './api';
-import { canManage, getCandidate, getJob, latestScreening, useApp } from './context';
-import type { Application } from './types';
-import { Avatar, Badge, Button, date, Empty, label, Modal, StageBadge } from './ui';
+import { useId, useState } from "react";
+import {
+  ArrowRight,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  FileCheck2,
+  FileText,
+  Mail,
+  MapPin,
+  MessageSquare,
+  Pencil,
+  Play,
+  Plus,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import { downloadDocument, post } from "./api";
+import {
+  canManage,
+  getCandidate,
+  getJob,
+  latestScreening,
+  screeningScore,
+  useApp,
+} from "./context";
+import type { Application } from "./types";
+import {
+  Avatar,
+  Badge,
+  Button,
+  date,
+  Empty,
+  label,
+  Modal,
+  StageBadge,
+} from "./ui";
 
-export function CandidatePanel({ application, onClose }: { application: Application; onClose: () => void }) {
+export function CandidatePanel({
+  application,
+  onClose,
+}: {
+  application: Application;
+  onClose: () => void;
+}) {
   const { data, user, open, command, busy } = useApp();
-  const candidate = getCandidate(data, application); const job = getJob(data, application); const screening = latestScreening(data, application.id);
-  const assessments = data.assessments.filter(a => a.application_id === application.id);
-  const interviews = data.interviews.filter(i => i.application_id === application.id);
-  const feedback = data.feedback.filter(f => f.application_id === application.id);
-  const [tab, setTab] = useState('overview'); const manage = canManage(user);
-  const stale = !!screening && (screening.criteria_version !== job?.criteria_version || screening.profile_version !== candidate?.profile_version);
+  const candidate = getCandidate(data, application);
+  const job = getJob(data, application);
+  const screening = latestScreening(data, application.id);
+  const assessments = data.assessments.filter(
+    (a) => a.application_id === application.id,
+  );
+  const interviews = data.interviews.filter(
+    (i) => i.application_id === application.id,
+  );
+  const feedback = data.feedback.filter(
+    (f) => f.application_id === application.id,
+  );
+  const [tab, setTab] = useState("overview");
+  const panelId = useId();
+  const manage = canManage(user);
+  const stale =
+    !!screening &&
+    (screening.criteria_version !== job?.criteria_version ||
+      screening.profile_version !== candidate?.profile_version);
   if (!candidate) return null;
-  return <Modal title="Candidate profile" eyebrow={job?.title ?? 'TALENT COMMUNITY'} wide onClose={onClose}>
-    <div className="candidate-detail-header"><Avatar name={candidate.name} size="avatar-large" index={2} /><div><h2>{candidate.name}</h2><p>{candidate.headline}</p><div className="candidate-meta">{candidate.location && <span><MapPin size={13} />{candidate.location}</span>}{candidate.experience_years !== undefined && <span><BriefcaseIcon />{candidate.experience_years} years experience</span>}</div></div><StageBadge stage={application.stage} /></div>
-    <div className="detail-tabs" role="tablist" aria-label="Candidate information">{[['overview', 'Overview'], ['screening', 'Screening'], ['assessment', 'Assessment'], ['interviews', 'Interviews']].map(([id, title]) => <button key={id} role="tab" aria-label={title} aria-selected={tab === id} className={tab === id ? 'tab-active' : ''} onClick={() => setTab(id)}>{title}{id === 'assessment' && assessments.length > 0 && <span aria-hidden="true">{assessments.length}</span>}</button>)}</div>
-    <div className="detail-body">
-      {tab === 'overview' && <><div className="detail-section-title"><h3>Meet {candidate.name.split(' ')[0]}</h3>{manage && <Button variant="ghost" onClick={() => open({ kind: 'profile', candidate })}><Pencil size={14} />Edit profile</Button>}</div><div className="detail-facts"><div><span><Mail size={14} />Email</span><strong>{candidate.email || (user ? 'Not provided' : 'Private in public demo')}</strong></div><div><span><Clock3 size={14} />Notice period</span><strong>{candidate.notice_period_days !== undefined && candidate.notice_period_days !== null ? `${candidate.notice_period_days} days` : 'Not provided'}</strong></div><div><span><FileText size={14} />Salary expectation</span><strong>{candidate.salary_expectation || 'Not provided'}</strong></div><div><span><CalendarDays size={14} />Added to pipeline</span><strong>{date(application.created_at)}</strong></div></div>{user && candidate.documents && candidate.documents.length > 0 && <><h3 className="detail-subheading">Original documents</h3><div className="document-links">{candidate.documents.map(document => <Button key={document.id} variant="secondary" onClick={() => void command(() => downloadDocument(document.id, document.filename), 'Original document downloaded.')}><FileText size={14} />{document.filename}</Button>)}</div></>}<h3 className="detail-subheading">Skills & experience</h3><div className="skill-tags">{candidate.skills?.length ? candidate.skills.map(skill => <span key={skill}>{skill}</span>) : <span>No skills extracted yet</span>}</div><div className="match-overview"><div className="match-overview-icon"><Sparkles size={23} /></div><div><h3>A clearer picture of their potential</h3><p>{screening ? `${candidate.name.split(' ')[0]} has ${screening.score}% evidence match against the confirmed rubric for ${job?.title}. Explore the source evidence before deciding.` : 'Screen this candidate against your confirmed job criteria to uncover the evidence behind their experience.'}</p></div><Button variant="secondary" onClick={() => setTab('screening')}>View screening<ArrowRight size={14} /></Button></div><div className="detail-section-title"><h3>Hiring team feedback</h3>{user && <Button variant="ghost" onClick={() => open({ kind: 'feedback', application })}><Plus size={14} />Add feedback</Button>}</div>{feedback.length ? feedback.map(item => <div className="feedback-item" key={item.id}><div><strong>{item.author_name || 'Hiring team'}</strong><Badge tone="purple">{item.rating}/5</Badge></div><p>{item.notes}</p><span className="small muted">{date(item.created_at, true)}</span></div>) : <p className="muted small">Good decisions start with a conversation. Interview feedback will appear here.</p>}</>}
-      {tab === 'screening' && <><div className="screening-summary"><div><span className="small-label">EVIDENCE MATCH</span><div className="large-score">{screening ? Math.round(screening.score) : '—'}<span>%</span></div><p>Based on the job’s confirmed criteria</p></div><div className="screening-summary-facts"><span><ShieldCheck size={15} />Source-linked evidence</span><span><Sparkles size={15} />{screening?.engine === 'demo' ? 'Demo matcher' : screening?.engine === 'gemini' ? `Gemini${screening.model ? ` · ${screening.model}` : ''}` : 'Provenance unavailable'}</span><span><FileCheck2 size={15} />{screening?.missing_count ?? '—'} criteria need more evidence</span><span><Clock3 size={15} />{screening?.reviewed_at ? `Reviewed ${date(screening.reviewed_at)}` : 'Human review required'}</span></div></div>{stale && <div className="form-notice notice-amber">This result uses an older rubric or profile. Rescreen to evaluate the current version.</div>}{screening ? <><div className="detail-section-title"><h3>What supports this match?</h3><Badge tone="purple">Rubric v{screening.criteria_version}</Badge></div><div className="evidence-list">{screening.matches.map((match, i) => <article className="evidence-item" key={match.criterion_id || i}><header><div><span className={`evidence-status evidence-status-${match.status}`}>{match.status === 'supported' ? <CheckCircle2 size={17} /> : <FileText size={17} />}</span><h4>{match.label}</h4></div><div><span className="small muted">{match.weight}% weight</span><Badge tone={match.status === 'supported' ? 'green' : match.status === 'partial' ? 'amber' : 'neutral'}>{match.status === 'insufficient' ? 'More evidence needed' : label(match.status)}</Badge></div></header><p>{match.reason}</p>{match.evidence?.map((evidence, k) => <blockquote key={k}><p>“{evidence.quote}”</p><cite><FileText size={12} />Resume · {evidence.segment_id}</cite></blockquote>)}</article>)}</div>{screening.review_notes && <div className="review-note"><strong>Recruiter review</strong><p>{screening.review_notes}</p></div>}</> : <Empty title="The evidence is waiting to be explored" text="Start a screening to match this resume against the job’s confirmed criteria." />}{manage && <div className="detail-action-row"><Button variant="secondary" disabled={busy || !job?.criteria_confirmed} onClick={() => void command(() => post(`/applications/${application.id}/screen`, { force: !!screening }), 'Screening queued. Results will update automatically.')}><Play size={14} />{screening ? 'Rescreen candidate' : 'Start screening'}</Button>{screening && !stale && screening.status === 'awaiting_review' && <Button onClick={() => open({ kind: 'review', application, screeningId: screening.id })}><CheckCircle2 size={15} />Review screening</Button>}{!job?.criteria_confirmed && <p className="small muted">Confirm the job criteria before screening.</p>}</div>}<div className="detail-policy"><ShieldCheck size={14} />Evidence match describes documented information. It is not a hiring prediction.</div></>}
-      {tab === 'assessment' && <><div className="detail-section-title"><div><h3>A little more room to shine</h3><p className="small muted">Short, job-relevant questions. Clear expectations.</p></div>{manage && assessments.length === 0 && <Button onClick={() => open({ kind: 'assessment', application })}><Plus size={14} />Create assessment</Button>}</div>{assessments.length ? assessments.map(assessment => <section className="assessment-card" key={assessment.id}><header><strong>Candidate questionnaire</strong><Badge tone={assessment.submitted_at ? 'green' : 'purple'}>{label(assessment.status)}</Badge></header><p className="small muted">{assessment.questions.length} questions · MCQ results stay separate from resume screening</p>{assessment.submitted_at && <div className="assessment-result"><FileCheck2 size={19} /><div><strong>MCQ score: {assessment.mcq_score ?? assessment.score ?? '—'}</strong><span>Submitted {date(assessment.submitted_at, true)}</span></div></div>}{assessment.questions.map((q, i) => <div className="assessment-question" key={q.id}><span>QUESTION {i + 1} · {q.kind === 'mcq' ? 'MULTIPLE CHOICE' : 'SHORT ANSWER'}</span><h4>{q.prompt}</h4>{assessment.answers?.[q.id] && <p>{assessment.answers[q.id]}</p>}</div>)}{assessment.short_answer_feedback?.map((item, i) => <div className="review-note" key={i}><strong>AI feedback · advisory</strong><p>{item.feedback}</p></div>)}{assessment.ai_feedback !== undefined && <div className="review-note"><strong>AI feedback · advisory</strong><p>{typeof assessment.ai_feedback === 'string' ? assessment.ai_feedback : 'Review the candidate responses against the approved question rubric.'}</p></div>}{assessment.review_notes && <div className="review-note"><strong>Reviewer notes</strong><p>{assessment.review_notes}</p></div>}{manage && assessment.submitted_at && !assessment.reviewed_at && <Button variant="secondary" onClick={() => open({ kind: 'assessment-review', application, assessmentId: assessment.id })}>Review responses<ArrowRight size={14} /></Button>}{!assessment.submitted_at && <><p className="small muted">Invitation links are shown once and expire after seven days.</p>{manage && assessment.status === 'invited' && <Button variant="secondary" onClick={() => open({ kind: 'reinvite', application, assessmentId: assessment.id })}>Regenerate invitation<ArrowRight size={14} /></Button>}</>}</section>) : <Empty title="Give potential a chance to speak" text="Create an invite-only questionnaire to understand the candidate’s job-relevant skills." />}</>}
-      {tab === 'interviews' && <><div className="detail-section-title"><div><h3>Make time for a conversation</h3><p className="small muted">Calendar availability is checked before confirmation.</p></div>{manage && <Button onClick={() => open({ kind: 'schedule', application })}><CalendarDays size={14} />Schedule interview</Button>}</div>{interviews.length ? interviews.map(interview => <div className="interview-detail" key={interview.id}><span className="interview-detail-icon"><CalendarDays size={23} /></span><div><h4>{job?.title} interview</h4><p>{date(interview.start, true)} — {new Date(interview.end).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</p><span className="small muted">Times shown in your device timezone · Saved zone: {interview.timezone}</span></div><Badge tone={interview.status === 'scheduled' ? 'green' : 'purple'}>{label(interview.status)}</Badge></div>) : <Empty title="Your next conversation starts here" text="Schedule a time once the candidate is ready. All test invitations go to owned accounts." />}{assessments.some(a => a.availability?.length) && <><h3 className="detail-subheading">Candidate availability</h3>{assessments.flatMap(a => a.availability ?? []).map((slot, i) => <div className="availability-card" key={i}><Clock3 size={16} /><span>{date(slot.start, true)} · your device time (submitted zone: {slot.timezone})</span>{manage && <Button variant="ghost" onClick={() => open({ kind: 'schedule', application })}>Schedule<ArrowRight size={13} /></Button>}</div>)}</>}{user && <Button variant="secondary" onClick={() => open({ kind: 'feedback', application })}><MessageSquare size={14} />Record interview feedback</Button>}</>}
-    </div>
-    <footer className="detail-footer"><span><ShieldCheck size={14} />{user ? 'Recruiter-controlled decisions' : 'Read-only synthetic demo'}</span>{manage && <Button onClick={() => open({ kind: 'stage', application })}>Update stage<ArrowRight size={15} /></Button>}</footer>
-  </Modal>;
+  return (
+    <Modal
+      title="Candidate profile"
+      eyebrow={job?.title ?? "TALENT COMMUNITY"}
+      wide
+      onClose={onClose}
+    >
+      <div className="candidate-detail-header">
+        <Avatar name={candidate.name} size="avatar-large" index={2} />
+        <div>
+          <h2>{candidate.name}</h2>
+          <p>{candidate.headline}</p>
+          <div className="candidate-meta">
+            {candidate.location && (
+              <span>
+                <MapPin size={13} />
+                {candidate.location}
+              </span>
+            )}
+            {candidate.experience_years != null && (
+              <span>
+                <BriefcaseIcon />
+                {candidate.experience_years} years experience
+              </span>
+            )}
+          </div>
+        </div>
+        <StageBadge stage={application.stage} />
+      </div>
+      <div
+        className="detail-tabs"
+        role="tablist"
+        aria-label="Candidate information"
+      >
+        {[
+          ["overview", "Overview"],
+          ["screening", "Screening"],
+          ["assessment", "Assessment"],
+          ["interviews", "Interviews"],
+        ].map(([id, title]) => (
+          <button
+            key={id}
+            role="tab"
+            id={`${panelId}-${id}`}
+            aria-controls={`${panelId}-content`}
+            aria-label={title}
+            aria-selected={tab === id}
+            tabIndex={tab === id ? 0 : -1}
+            className={tab === id ? "tab-active" : ""}
+            onClick={() => setTab(id)}
+            onKeyDown={(event) => {
+              const tabs = [
+                ...event.currentTarget.parentElement!.querySelectorAll<HTMLButtonElement>(
+                  '[role="tab"]',
+                ),
+              ];
+              const index = tabs.indexOf(event.currentTarget);
+              const next =
+                event.key === "ArrowRight"
+                  ? (index + 1) % tabs.length
+                  : event.key === "ArrowLeft"
+                    ? (index + tabs.length - 1) % tabs.length
+                    : event.key === "Home"
+                      ? 0
+                      : event.key === "End"
+                        ? tabs.length - 1
+                        : null;
+              if (next === null) return;
+              event.preventDefault();
+              tabs[next].click();
+              tabs[next].focus();
+            }}
+          >
+            {title}
+            {id === "assessment" && assessments.length > 0 && (
+              <span aria-hidden="true">{assessments.length}</span>
+            )}
+          </button>
+        ))}
+      </div>
+      <div
+        className="detail-body"
+        role="tabpanel"
+        id={`${panelId}-content`}
+        aria-labelledby={`${panelId}-${tab}`}
+        tabIndex={0}
+      >
+        {tab === "overview" && (
+          <>
+            <div className="detail-section-title">
+              <h3>Candidate profile</h3>
+              {manage && (
+                <Button
+                  variant="ghost"
+                  onClick={() => open({ kind: "profile", candidate })}
+                >
+                  <Pencil size={14} />
+                  Edit profile
+                </Button>
+              )}
+            </div>
+            <div className="detail-facts">
+              <div>
+                <span>
+                  <Mail size={14} />
+                  Email
+                </span>
+                <strong>
+                  {candidate.email ||
+                    (user ? "Not provided" : "Private in public demo")}
+                </strong>
+              </div>
+              <div>
+                <span>
+                  <Clock3 size={14} />
+                  Notice period
+                </span>
+                <strong>
+                  {candidate.notice_period_days !== undefined &&
+                  candidate.notice_period_days !== null
+                    ? `${candidate.notice_period_days} days`
+                    : "Not provided"}
+                </strong>
+              </div>
+              <div>
+                <span>
+                  <FileText size={14} />
+                  Salary expectation
+                </span>
+                <strong>
+                  {candidate.salary_expectation || "Not provided"}
+                </strong>
+              </div>
+              <div>
+                <span>
+                  <CalendarDays size={14} />
+                  Added to pipeline
+                </span>
+                <strong>{date(application.created_at)}</strong>
+              </div>
+            </div>
+            {user && candidate.documents && candidate.documents.length > 0 && (
+              <>
+                <h3 className="detail-subheading">Original documents</h3>
+                <div className="document-links">
+                  {candidate.documents.map((document) => (
+                    <Button
+                      key={document.id}
+                      variant="secondary"
+                      onClick={() =>
+                        void command(
+                          () =>
+                            downloadDocument(document.id, document.filename),
+                          "Original document downloaded.",
+                        )
+                      }
+                    >
+                      <FileText size={14} />
+                      {document.filename}
+                    </Button>
+                  ))}
+                </div>
+              </>
+            )}
+            <h3 className="detail-subheading">Skills & experience</h3>
+            <div className="skill-tags">
+              {candidate.skills?.length ? (
+                candidate.skills.map((skill) => (
+                  <span key={skill}>{skill}</span>
+                ))
+              ) : (
+                <span>No skills extracted yet</span>
+              )}
+            </div>
+            <div className="match-overview">
+              <div className="match-overview-icon">
+                <Sparkles size={23} />
+              </div>
+              <div>
+                <h3>Evidence against the job rubric</h3>
+                <p>
+                  {screeningScore(screening) !== undefined
+                    ? `${candidate.name.split(" ")[0]} has ${screening!.score}% evidence match against the confirmed rubric for ${job?.title}. Explore the source evidence before deciding.`
+                    : "Screen this candidate against your confirmed job criteria to uncover the evidence behind their experience."}
+                </p>
+              </div>
+              <Button variant="secondary" onClick={() => setTab("screening")}>
+                View screening
+                <ArrowRight size={14} />
+              </Button>
+            </div>
+            <div className="detail-section-title">
+              <h3>Hiring team feedback</h3>
+              {user && (
+                <Button
+                  variant="ghost"
+                  onClick={() => open({ kind: "feedback", application })}
+                >
+                  <Plus size={14} />
+                  Add feedback
+                </Button>
+              )}
+            </div>
+            {feedback.length ? (
+              feedback.map((item) => (
+                <div className="feedback-item" key={item.id}>
+                  <div>
+                    <strong>{item.author_name || "Hiring team"}</strong>
+                    <Badge tone="purple">{item.rating}/5</Badge>
+                  </div>
+                  <p>{item.notes}</p>
+                  <span className="small muted">
+                    {date(item.created_at, true)}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <p className="muted small">
+                Interview feedback will appear here.
+              </p>
+            )}
+          </>
+        )}
+        {tab === "screening" && (
+          <>
+            <div className="screening-summary">
+              <div>
+                <span className="small-label">EVIDENCE MATCH</span>
+                <div className="large-score">
+                  {screeningScore(screening) === undefined
+                    ? "—"
+                    : Math.round(screening!.score)}
+                  <span>%</span>
+                </div>
+                <p>
+                  {screening ? label(screening.status) : "Ready for screening"}{" "}
+                  · Confirmed job criteria
+                </p>
+              </div>
+              <div className="screening-summary-facts">
+                <span>
+                  <ShieldCheck size={15} />
+                  Source-linked evidence
+                </span>
+                <span>
+                  <Sparkles size={15} />
+                  {screening?.engine === "demo"
+                    ? "Demo matcher"
+                    : screening?.engine === "gemini"
+                      ? `Gemini${screening.model ? ` · ${screening.model}` : ""}`
+                      : "Provenance unavailable"}
+                </span>
+                <span>
+                  <FileCheck2 size={15} />
+                  {screening?.missing_count ?? "—"} criteria need more evidence
+                </span>
+                <span>
+                  <Clock3 size={15} />
+                  {screening?.reviewed_at
+                    ? `Reviewed ${date(screening.reviewed_at)}`
+                    : "Human review required"}
+                </span>
+              </div>
+            </div>
+            {stale && (
+              <div className="form-notice notice-amber">
+                This result uses an older rubric or profile. Rescreen to
+                evaluate the current version.
+              </div>
+            )}
+            {screening ? (
+              <>
+                <div className="detail-section-title">
+                  <h3>What supports this match?</h3>
+                  <Badge tone="purple">
+                    Rubric v{screening.criteria_version}
+                  </Badge>
+                </div>
+                <div className="evidence-list">
+                  {screening.matches.map((match, i) => (
+                    <article
+                      className="evidence-item"
+                      key={match.criterion_id || i}
+                    >
+                      <header>
+                        <div>
+                          <span
+                            className={`evidence-status evidence-status-${match.status}`}
+                          >
+                            {match.status === "supported" ? (
+                              <CheckCircle2 size={17} />
+                            ) : (
+                              <FileText size={17} />
+                            )}
+                          </span>
+                          <h4>{match.label}</h4>
+                        </div>
+                        <div>
+                          <span className="small muted">
+                            {match.weight}% weight
+                          </span>
+                          <Badge
+                            tone={
+                              match.status === "supported"
+                                ? "green"
+                                : match.status === "partial"
+                                  ? "amber"
+                                  : "neutral"
+                            }
+                          >
+                            {match.status === "insufficient"
+                              ? "More evidence needed"
+                              : label(match.status)}
+                          </Badge>
+                        </div>
+                      </header>
+                      <p>{match.reason}</p>
+                      {match.evidence?.map((evidence, k) => (
+                        <blockquote key={k}>
+                          <p>“{evidence.quote}”</p>
+                          <cite>
+                            <FileText size={12} />
+                            Resume · {evidence.segment_id}
+                          </cite>
+                        </blockquote>
+                      ))}
+                    </article>
+                  ))}
+                </div>
+                {screening.review_notes && (
+                  <div className="review-note">
+                    <strong>Recruiter review</strong>
+                    <p>{screening.review_notes}</p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <Empty
+                title="No screening result yet"
+                text="Start a screening to match this resume against the job’s confirmed criteria."
+              />
+            )}
+            {manage && (
+              <div className="detail-action-row">
+                <Button
+                  variant="secondary"
+                  disabled={busy || !job?.criteria_confirmed}
+                  onClick={() =>
+                    void command(
+                      () =>
+                        post(`/applications/${application.id}/screen`, {
+                          force: !!screening,
+                        }),
+                      "Screening queued. Results will update automatically.",
+                    )
+                  }
+                >
+                  <Play size={14} />
+                  {screening ? "Rescreen candidate" : "Start screening"}
+                </Button>
+                {screening &&
+                  !stale &&
+                  screening.status === "awaiting_review" && (
+                    <Button
+                      onClick={() =>
+                        open({
+                          kind: "review",
+                          application,
+                          screeningId: screening.id,
+                        })
+                      }
+                    >
+                      <CheckCircle2 size={15} />
+                      Review screening
+                    </Button>
+                  )}
+                {!job?.criteria_confirmed && (
+                  <p className="small muted">
+                    Confirm the job criteria before screening.
+                  </p>
+                )}
+              </div>
+            )}
+            <div className="detail-policy">
+              <ShieldCheck size={14} />
+              Evidence match describes documented information. It is not a
+              hiring prediction.
+            </div>
+          </>
+        )}
+        {tab === "assessment" && (
+          <>
+            <div className="detail-section-title">
+              <div>
+                <h3>Candidate assessment</h3>
+                <p className="small muted">
+                  Approved questions and submitted responses.
+                </p>
+              </div>
+              {manage && assessments.length === 0 && (
+                <Button
+                  onClick={() => open({ kind: "assessment", application })}
+                >
+                  <Plus size={14} />
+                  Create assessment
+                </Button>
+              )}
+            </div>
+            {assessments.length ? (
+              assessments.map((assessment) => (
+                <section className="assessment-card" key={assessment.id}>
+                  <header>
+                    <strong>Candidate questionnaire</strong>
+                    <Badge tone={assessment.submitted_at ? "green" : "purple"}>
+                      {label(assessment.status)}
+                    </Badge>
+                  </header>
+                  <p className="small muted">
+                    {assessment.questions.length} questions · MCQ results stay
+                    separate from resume screening
+                  </p>
+                  {assessment.submitted_at && (
+                    <div className="assessment-result">
+                      <FileCheck2 size={19} />
+                      <div>
+                        <strong>
+                          MCQ score:{" "}
+                          {assessment.mcq_score ?? assessment.score ?? "—"}
+                        </strong>
+                        <span>
+                          Submitted {date(assessment.submitted_at, true)}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {assessment.questions.map((q, i) => (
+                    <div className="assessment-question" key={q.id}>
+                      <span>
+                        QUESTION {i + 1} ·{" "}
+                        {q.kind === "mcq" ? "MULTIPLE CHOICE" : "SHORT ANSWER"}
+                      </span>
+                      <h4>{q.prompt}</h4>
+                      {assessment.answers?.[q.id] && (
+                        <p>{assessment.answers[q.id]}</p>
+                      )}
+                    </div>
+                  ))}
+                  {assessment.short_answer_feedback?.map((item, i) => (
+                    <div className="review-note" key={i}>
+                      <strong>AI feedback · advisory</strong>
+                      <p>{item.feedback}</p>
+                    </div>
+                  ))}
+                  {assessment.ai_feedback !== undefined && (
+                    <div className="review-note">
+                      <strong>AI feedback · advisory</strong>
+                      <p>
+                        {typeof assessment.ai_feedback === "string"
+                          ? assessment.ai_feedback
+                          : "Review the candidate responses against the approved question rubric."}
+                      </p>
+                    </div>
+                  )}
+                  {assessment.review_notes && (
+                    <div className="review-note">
+                      <strong>Reviewer notes</strong>
+                      <p>{assessment.review_notes}</p>
+                    </div>
+                  )}
+                  {manage &&
+                    assessment.submitted_at &&
+                    !assessment.reviewed_at && (
+                      <Button
+                        variant="secondary"
+                        onClick={() =>
+                          open({
+                            kind: "assessment-review",
+                            application,
+                            assessmentId: assessment.id,
+                          })
+                        }
+                      >
+                        Review responses
+                        <ArrowRight size={14} />
+                      </Button>
+                    )}
+                  {!assessment.submitted_at && (
+                    <>
+                      <p className="small muted">
+                        Invitation links are shown once and expire after seven
+                        days.
+                      </p>
+                      {manage && assessment.status === "invited" && (
+                        <Button
+                          variant="secondary"
+                          onClick={() =>
+                            open({
+                              kind: "reinvite",
+                              application,
+                              assessmentId: assessment.id,
+                            })
+                          }
+                        >
+                          Regenerate invitation
+                          <ArrowRight size={14} />
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </section>
+              ))
+            ) : (
+              <Empty
+                title="No assessment created"
+                text="Create an invite-only questionnaire to understand the candidate’s job-relevant skills."
+              />
+            )}
+          </>
+        )}
+        {tab === "interviews" && (
+          <>
+            <div className="detail-section-title">
+              <div>
+                <h3>Schedule an interview</h3>
+                <p className="small muted">
+                  Calendar availability is checked before confirmation.
+                </p>
+              </div>
+              {manage && (
+                <Button onClick={() => open({ kind: "schedule", application })}>
+                  <CalendarDays size={14} />
+                  Schedule interview
+                </Button>
+              )}
+            </div>
+            {interviews.length ? (
+              interviews.map((interview) => (
+                <div className="interview-detail" key={interview.id}>
+                  <span className="interview-detail-icon">
+                    <CalendarDays size={23} />
+                  </span>
+                  <div>
+                    <h4>{job?.title} interview</h4>
+                    <p>
+                      {date(interview.start, true)} —{" "}
+                      {new Date(interview.end).toLocaleTimeString(undefined, {
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    <span className="small muted">
+                      Times shown in your device timezone · Saved zone:{" "}
+                      {interview.timezone}
+                    </span>
+                  </div>
+                  <Badge
+                    tone={interview.status === "scheduled" ? "green" : "purple"}
+                  >
+                    {label(interview.status)}
+                  </Badge>
+                </div>
+              ))
+            ) : (
+              <Empty
+                title="No interviews scheduled"
+                text="Schedule a time once the candidate is ready. All test invitations go to owned accounts."
+              />
+            )}
+            {assessments.some((a) => a.availability?.length) && (
+              <>
+                <h3 className="detail-subheading">Candidate availability</h3>
+                {assessments
+                  .flatMap((a) => a.availability ?? [])
+                  .map((slot, i) => (
+                    <div className="availability-card" key={i}>
+                      <Clock3 size={16} />
+                      <span>
+                        {date(slot.start, true)} · your device time (submitted
+                        zone: {slot.timezone})
+                      </span>
+                      {manage && (
+                        <Button
+                          variant="ghost"
+                          onClick={() =>
+                            open({ kind: "schedule", application })
+                          }
+                        >
+                          Schedule
+                          <ArrowRight size={13} />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+              </>
+            )}
+            {user && (
+              <Button
+                variant="secondary"
+                onClick={() => open({ kind: "feedback", application })}
+              >
+                <MessageSquare size={14} />
+                Record interview feedback
+              </Button>
+            )}
+          </>
+        )}
+      </div>
+      <footer className="detail-footer">
+        <span>
+          <ShieldCheck size={14} />
+          {user ? "Recruiter-controlled decisions" : "Read-only synthetic demo"}
+        </span>
+        {manage && (
+          <Button onClick={() => open({ kind: "stage", application })}>
+            Update stage
+            <ArrowRight size={15} />
+          </Button>
+        )}
+      </footer>
+    </Modal>
+  );
 }
-function BriefcaseIcon() { return <FileText size={13} />; }
+function BriefcaseIcon() {
+  return <FileText size={13} />;
+}

@@ -30,7 +30,7 @@ click==8.5.1
     # via uvicorn
 colorama==0.4.6
     # via pytest
-cryptography==49.0.0
+cryptography==50.0.2
     # via
     #   -r requirements.in
     #   google-auth

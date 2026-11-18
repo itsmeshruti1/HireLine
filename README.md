@@ -1,11 +1,20 @@
 # Hireline — Recruiter AI Workspace
 
-An explainable recruiting portfolio application: create a job, inspect resume evidence,
-review a screening, invite a candidate to an assessment, schedule an interview, and record
-a decision. All included people, employers, and resumes are fictional.
+Hireline is a recruiting workspace for reviewing resumes, running assessments, arranging
+interviews, and recording hiring decisions. Each screening result shows the job criterion,
+supporting resume excerpts, and missing evidence. Recruiters approve results and move
+applications through the pipeline.
+
+The complete demo runs locally without API keys, using fictional candidates and simulated
+email and calendar actions. Live integrations and hosted deployment still need account
+configuration; see the setup instructions below.
 
 [Watch the nine-minute narrated walkthrough](output/demo/hireline-end-to-end.mp4) ·
 [Download captions](output/demo/hireline-demo.srt) · [Verification results](docs/verification.md)
+
+The workspace uses a charcoal, cream, and green design with locally served Instrument fonts,
+GSAP view transitions, and reduced-motion support. The existing walkthrough shows the earlier interface.
+[GSAP animation guidance](https://gsap.com/resources/React/)
 
 ## Run locally
 
@@ -55,7 +64,7 @@ Public signup is not implemented. Do not expose a local-mode backend to the publ
 
 The default **demo matcher** uses deterministic term matching. It is labelled as such in the UI.
 **Preview communication** stores a simulated action without sending email or creating a calendar event.
-Neither mode silently pretends to call a provider. Live provider code is included but needs your accounts.
+Live provider adapters are included and require your own accounts and credentials.
 
 ## Configure live test integrations
 
@@ -113,6 +122,10 @@ npm.cmd run test:e2e
 The backend tests isolate their databases and mock external providers. The optional PostgreSQL
 test runs when `POSTGRES_TEST_URL` is supplied; CI includes a real PostgreSQL service.
 Browser tests start their own application servers; see `frontend/playwright.config.ts` for ports.
+
+The November 18 verification passed 92 backend tests and 11 Playwright tests. The release report
+documents accessibility checks, the outstanding frontend build dependency advisory, and live
+provider/deployment checks that still require account configuration.
 
 The tracked [evaluation report](docs/evaluation.md) and JSON contain measured results from
 the current fixture set, including the keyword baseline and limitations. Measure Gemini separately:

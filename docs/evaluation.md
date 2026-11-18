@@ -1,6 +1,6 @@
 # Screening evaluation
 
-Provider mode: **demo**. Generated 2026-11-10T17:50:43.736251+00:00.
+Provider mode: **demo**. Generated 2026-11-18T02:25:35.764694+00:00.
 
 Evaluated 20 fictional resumes, split between PDF and DOCX, against three jobs.
 

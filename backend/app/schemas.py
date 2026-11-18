@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Literal
+from typing import Annotated, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator, model_validator
 
 
 class Input(BaseModel):
@@ -9,8 +9,14 @@ class Input(BaseModel):
 
 
 class Login(Input):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=False)
     email: str = Field(max_length=254)
     password: str = Field(max_length=1024)
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, value):
+        return value.strip()
 
 
 class Criterion(Input):
@@ -95,7 +101,7 @@ class Question(Input):
     id: str = Field(min_length=1, max_length=80)
     kind: Literal["mcq", "short"]
     prompt: str = Field(min_length=3, max_length=2000)
-    options: list[str] = Field(default_factory=list, max_length=10)
+    options: list[Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=2000)]] = Field(default_factory=list, max_length=10)
     answer: str | None = Field(default=None, max_length=2000)
     rubric: str = Field(default="", max_length=2000)
 
@@ -103,6 +109,8 @@ class Question(Input):
     def check_question(self):
         if self.kind == "mcq" and (len(self.options) < 2 or self.answer not in self.options):
             raise ValueError("MCQs require at least two options and an answer matching one option")
+        if len(set(self.options)) != len(self.options):
+            raise ValueError("Question options must be unique")
         if self.kind == "short" and not self.rubric:
             raise ValueError("Short-answer questions require a review rubric")
         return self

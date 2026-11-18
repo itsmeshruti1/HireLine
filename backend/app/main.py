@@ -13,6 +13,7 @@ import jwt
 from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, Response
+from starlette.concurrency import run_in_threadpool
 from sqlalchemy import delete, select, text, update
 from sqlalchemy.exc import IntegrityError
 
@@ -191,7 +192,7 @@ def create_app(settings: Settings | None = None):
 
     @app.get("/api/config")
     def config():
-        return {"auth_mode": settings.auth_mode, "ai_mode": settings.ai_mode, "external_mode": settings.external_mode, "local_login": settings.auth_mode == "local", "frontend_url": settings.frontend_url, "worker_sleeps": settings.app_env == "production"}
+        return {"auth_mode": settings.auth_mode, "ai_mode": settings.ai_mode, "external_mode": settings.external_mode, "local_login": settings.auth_mode == "local", "frontend_url": settings.frontend_url, "worker_sleeps": settings.app_env == "production", "demo_reset_enabled": settings.app_env != "production" or settings.enable_demo_reset}
 
     @app.post("/api/auth/login")
     def sign_in(body: schemas.Login, session=Depends(db_session)):
@@ -217,10 +218,13 @@ def create_app(settings: Settings | None = None):
     def change_role(id: str, body: dict, user=Depends(admin), session=Depends(db_session)):
         if set(body) != {"role"} or body["role"] not in {"admin", "recruiter", "manager"}:
             raise HTTPException(422, "Provide a role: admin, recruiter, or manager")
-        staff_user = session.get(User, id)
+        if session.get_bind().dialect.name == "sqlite":
+            session.execute(text("BEGIN IMMEDIATE"))
+        staff_users = list(session.scalars(select(User).order_by(User.id).with_for_update()))
+        staff_user = next((account for account in staff_users if account.id == id), None)
         if not staff_user:
             raise HTTPException(404, "Staff account not found")
-        admins = list(session.scalars(select(User).where(User.role == "admin")))
+        admins = [account for account in staff_users if account.role == "admin"]
         if staff_user.role == "admin" and body["role"] != "admin" and len(admins) == 1:
             raise HTTPException(409, "The workspace must retain at least one admin")
         previous = staff_user.role
@@ -354,8 +358,8 @@ def create_app(settings: Settings | None = None):
                 session.add(candidate)
                 session.flush()
                 key = f"{candidate.id}/{uid()}{suffix}"
-                storage.put(key, content, "application/pdf" if suffix == ".pdf" else "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                 keys.append(key)
+                await run_in_threadpool(storage.put, key, content, "application/pdf" if suffix == ".pdf" else "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                 document = Document(candidate_id=candidate.id, filename=filename, storage_key=key, content_hash=digest)
                 application = Application(job_id=id, candidate_id=candidate.id)
                 session.add_all([document, application])
@@ -368,7 +372,7 @@ def create_app(settings: Settings | None = None):
             session.rollback()
             for key in keys:
                 try:
-                    storage.delete(key)
+                    await run_in_threadpool(storage.delete, key)
                 except Exception:
                     logger.warning("Storage cleanup needed for an interrupted upload")
             raise
@@ -415,7 +419,8 @@ def create_app(settings: Settings | None = None):
         screening = session.get(Screening, id)
         if not screening:
             raise HTTPException(404, "Screening not found")
-        application = get_application(session, user, screening.application_id)
+        application = get_application(session, user, screening.application_id, lock=True)
+        session.refresh(screening)
         candidate, job = session.get(Candidate, application.candidate_id), session.get(Job, application.job_id)
         if screening.criteria_version != job.criteria_version or screening.profile_version != candidate.profile_version:
             raise HTTPException(409, "Criteria or profile changed. Start a new screening.")
@@ -430,7 +435,7 @@ def create_app(settings: Settings | None = None):
 
     @app.patch("/api/applications/{id}/stage")
     def move_stage(id: str, body: schemas.StageInput, user=Depends(recruiter), session=Depends(db_session)):
-        application = get_application(session, user, id)
+        application = get_application(session, user, id, lock=True)
         if application.stage in {"hired", "rejected", "withdrawn"} and body.stage != application.stage:
             raise HTTPException(409, "This application is closed. Create a new application for a new hiring process.")
         if body.stage in {"hired", "rejected", "withdrawn"} and not body.note:
@@ -474,7 +479,8 @@ def create_app(settings: Settings | None = None):
         assessment = session.get(Assessment, id)
         if not assessment:
             raise HTTPException(404, "Assessment not found")
-        application = get_application(session, user, assessment.application_id)
+        application = get_application(session, user, assessment.application_id, lock=True)
+        session.refresh(assessment, with_for_update=True)
         if assessment.status != "invited":
             raise HTTPException(409, "A submitted assessment cannot be reinvited")
         active_mail = session.scalar(select(BackgroundJob).where(BackgroundJob.application_id == application.id, BackgroundJob.kind == "email", BackgroundJob.status.in_(["queued", "running"])).limit(1))
@@ -532,10 +538,10 @@ def create_app(settings: Settings | None = None):
         if any(window.start < now() for window in body.availability):
             raise HTTPException(422, "Availability must be in the future")
         score = round(sum(body.answers[q["id"]] == q["answer"] for q in mcqs)/len(mcqs)*100, 1) if mcqs else None
-        changed = session.execute(update(Assessment).where(Assessment.id == assessment.id, Assessment.status == "invited").values(status="submitted", submitted_at=now(), answers=body.answers, availability=[v.model_dump(mode="json") for v in body.availability], mcq_score=score))
+        changed = session.execute(update(Assessment).execution_options(synchronize_session=False).where(Assessment.id == assessment.id, Assessment.status == "invited", Assessment.token_hash == hashlib.sha256(token.encode()).hexdigest(), Assessment.expires_at >= now()).values(status="submitted", submitted_at=now(), answers=body.answers, availability=[v.model_dump(mode="json") for v in body.availability], mcq_score=score))
         if changed.rowcount != 1:
             session.rollback()
-            raise HTTPException(409, "This assessment has already been submitted")
+            raise HTTPException(409, "This invitation has changed, expired, or already been submitted. Refresh the page or ask the recruiter for the current link.")
         task = enqueue(session, "assessment_feedback", {"assessment_id": assessment.id}, assessment.application_id)
         audit(session, None, "assessment.submitted", assessment.id)
         session.commit()
@@ -565,7 +571,7 @@ def create_app(settings: Settings | None = None):
         dedupe = "interview:" + hashlib.sha256(f"{id}|{start.isoformat()}|{end.isoformat()}".encode()).hexdigest()
         existing = session.scalar(select(OutboundAction).where(OutboundAction.dedupe_key == dedupe))
         if existing:
-            task = session.scalar(select(BackgroundJob).where(BackgroundJob.application_id == id, BackgroundJob.kind == "interview").order_by(BackgroundJob.created_at.desc()))
+            task = session.scalar(select(BackgroundJob).where(BackgroundJob.application_id == id, BackgroundJob.kind == "interview", BackgroundJob.payload["action_id"].as_string() == existing.id).order_by(BackgroundJob.created_at.desc()))
             return {"job_id": task.id, "action_id": existing.id, "cached": True}
         action_id = uid()
         interview = Interview(application_id=id, start=start, end=end, timezone=body.timezone, action_id=action_id)
@@ -606,7 +612,9 @@ def create_app(settings: Settings | None = None):
 
     @app.post("/api/background-jobs/{id}/retry", status_code=202)
     def retry_task(id: str, user=Depends(recruiter), session=Depends(db_session)):
-        task = session.get(BackgroundJob, id)
+        if session.get_bind().dialect.name == "sqlite":
+            session.execute(text("BEGIN IMMEDIATE"))
+        task = session.scalar(select(BackgroundJob).where(BackgroundJob.id == id).with_for_update())
         if not task:
             raise HTTPException(404, "Processing task not found")
         if task.status != "failed" or task.kind in {"interview", "screen_review"}:
@@ -684,7 +692,7 @@ def create_app(settings: Settings | None = None):
 
     @app.get("/api/integrations/calendar/freebusy")
     def freebusy(start: datetime, end: datetime, user=Depends(recruiter), session=Depends(db_session)):
-        if start.tzinfo is None or end.tzinfo is None or end <= start or (end-start).days > 7:
+        if start.tzinfo is None or end.tzinfo is None or end <= start or (end-start).total_seconds() > 7 * 86400:
             raise HTTPException(422, "Provide a timezone-aware window of at most seven days")
         from .services.integrations import Integrations
         integrations = Integrations(settings)
