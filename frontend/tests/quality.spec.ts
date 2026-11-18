@@ -151,6 +151,7 @@ test("mobile menu and dialogs keep keyboard focus within the active surface", as
   await expect(menu).toBeFocused();
   await page.getByRole("button", { name: "Staff sign in" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCSS("opacity", "1");
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
     .analyze();

@@ -33,6 +33,7 @@ test("public demo is useful and read-only", async ({ page }) => {
     .getByRole("button", { name: `View ${firstName}`, exact: true })
     .click();
   await page.getByRole("tab", { name: "Screening", exact: true }).click();
+  await expect(page.getByRole("dialog").last()).toHaveCSS("opacity", "1");
   expect(
     (
       await new AxeBuilder({ page })
@@ -76,6 +77,7 @@ test("staff can create, screen, review, and assess a synthetic candidate", async
     page.getByRole("button", { name: "Create a job", exact: true }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Create a job", exact: true }).click();
+  await expect(page.getByRole("dialog").last()).toHaveCSS("opacity", "1");
   expect(
     (
       await new AxeBuilder({ page })
@@ -177,6 +179,7 @@ test("staff can create, screen, review, and assess a synthetic candidate", async
   await page
     .getByRole("button", { name: "Create assessment", exact: true })
     .click();
+  await expect(page.getByRole("dialog").last()).toHaveCSS("opacity", "1");
   expect(
     (
       await new AxeBuilder({ page })
